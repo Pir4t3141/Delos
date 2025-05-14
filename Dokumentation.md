@@ -16,7 +16,7 @@ Auch können Songs bzw Audios in das Programm hochgeladen werden
 | Wann? | Was? | Wer? | Fortschritt |
 |----------|----------|----------|----------|
 | 14.05 | Grunddesign der GUI | Chiara | 0% |
-| Inhalt 5 | Inhalt 6 | Inhalt 7 | Inhalt 8 |
+| 14.05 | Grundaufbau der Klassen | Tobias | 0% |
 | Inhalt 9 | Inhalt 10| Inhalt 11| Inhalt 12|
 | Inhalt 1 | Inhalt 2 | Inhalt 3 | Inhalt 4 |
 | Inhalt 5 | Inhalt 6 | Inhalt 7 | Inhalt 8 |
