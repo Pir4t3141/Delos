@@ -12,6 +12,27 @@ Programm zum Abspielen von Musik. Dort können Playlists erstellt und gespeicher
 Auch können Songs bzw Audios in das Programm hochgeladen werden
 
 
+## Must-Haves
+- Musik abspielen (Pause, Play, Skip, Vorspülen)
+- Erstellen und Erweitern von Playlists
+- Importieren von Songs
+- Favoriten
+- Shuffle
+- Volume-Slider
+- Playlist-Klasse mit allgemeinen Infos wie Songanzahl, Dauer der Playlist, ...
+- Song Klass mit Infos wie Ersteller, Dauer, ...
+
+
+## Nice-To-Haves
+- Suchoption
+- Autoplay
+- Loop
+- Songs sotriteren bzw. Ordnung änderbar (Date, Artist, Name)
+- Webserver mit Songs
+- Wiedergabezeitpunkt speichern
+- Bild zum Song
+- Warteschlange
+
 ## Projektzeitplan:
 | Wann? | Was? | Wer? | Fortschritt |
 |----------|----------|----------|----------|
