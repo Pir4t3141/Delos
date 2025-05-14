@@ -44,4 +44,49 @@ Auch können Songs bzw Audios in das Programm hochgeladen werden
 | Inhalt 9 | Inhalt 10| Inhalt 11| Inhalt 12|
 
 
+## Klassen
+### Song Klasse
+- +Name:string
+- +Length:int
+- +ReleaseDate:DateTime
+- +Artist:string
+- +Progress:int
+- +Album:string
+- --------------------------
+- +Song(path:string)
+- --------------------------
+- +loadFromMetaData():void
+- +editMetaData():void
+- +override ToString():string
+- +serializeToString():string
+- +deserialize():Song
+- --------------------------
+
+### Playlist Klasse
+- +Songanzahl:int 
+- +Shuffle:bool 
+- +Repeat:bool 
+- +Name:string 
+- +Playtime:int 
+- +SongList[Song]:List 
+- +CurrentSong:int 
+- +SongListSorted[Song]:List
+- --------------------------
+- +Playlist(name:string)
+- --------------------------
+- +import(path:string):void 
+- +save(path:string):void 
+- +addSong(Song):void 
+- +removeSong(Song):void 
+- +skip():void 
+- +sort():void 
+- +nextSong():void 
+- +serialize() 
+
+
+
+
 ## Bedienungsanleitung
+## Bekannte Bugs / Probleme die noch vorliegen
+## Erweiterungsmöglichkeiten
+
