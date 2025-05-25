@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NAudio;
+using NAudio.Wave;
 
 namespace MusikProgramm
 {
@@ -16,6 +18,18 @@ namespace MusikProgramm
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Zum musik abspielen: Naudio (WASAPI)
+
+        /* musik abspielen: 
+        string path = "C:\\Users\\tobias\\.... .mp3";
+        AudioFileReader audiofile = new AudioFileReader(path);
+        WasapiOut outputDevice = new WasapiOut();
+        outputDevice.Init(audiofile);
+        outputDevice.Play();*/
+
+        public AudioFileReader audiofile;
+        public WasapiOut outputDevice;
+
         public MainWindow()
         {
             InitializeComponent();

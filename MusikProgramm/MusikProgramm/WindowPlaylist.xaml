@@ -43,7 +43,8 @@
             <ComboBox Width="100" Height="30" Margin="5" HorizontalAlignment="Right">
                 <ComboBoxItem Content="Date"/>
                 <ComboBoxItem Content="Artist"/>
-                <ComboBoxItem Content="Name" IsSelected="True"/>
+                <ComboBoxItem Content="Name"/>
+                <ComboBoxItem Content="Default" IsSelected="True"/> <!--No sort (users own order)-->
             </ComboBox>
         </DockPanel>
     </Grid>
