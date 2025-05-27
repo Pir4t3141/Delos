@@ -10,6 +10,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NAudio;
 using NAudio.Wave;
+using Serilog;
 
 namespace MusikProgramm
 {
@@ -33,6 +34,15 @@ namespace MusikProgramm
         public MainWindow()
         {
             InitializeComponent();
+
+            //Serilog Einrichten
+
+            Log.Logger = new LoggerConfiguration().
+                MinimumLevel.Debug().
+                WriteTo.File("stopwatch.log", rollingInterval: RollingInterval.Month).
+                CreateLogger();
+
+            Log.Debug("Started MainWindow");
         }
     }
 }
