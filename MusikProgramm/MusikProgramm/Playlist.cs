@@ -10,7 +10,7 @@ namespace MusikProgramm
     {
         public int SongAnzahl { get; set; } //TODO: edit get; set;
 
-        public bool Shuffle { get; set; } = false;
+        //public bool Shuffle { get; set; } = false;
 
         public bool Repeat { get; set; } = false;
 
@@ -20,10 +20,10 @@ namespace MusikProgramm
 
         public List<Song> SongList { get; set; }
 
-        public int currentSongs { get; set; } = 0;
+        public int currentSong { get; set; } = 0;
 
         public List<Song> SongListSorted { get; set; } // TODO: Make it so that it is songlist on start
-
+        
         public Playlist(string name)
         {
             //TODO  
@@ -41,17 +41,17 @@ namespace MusikProgramm
 
         public void addSong(Song song)
         {
-            //TODO
+            SongList.Add(song);
         }
 
         public void removeSong(Song song)
         {
-            //TODO
+            SongList.Remove(song);
         }
 
         public void skip()
         {
-            //TODO
+            currentSong += 1;
         }
 
         public void sort()
@@ -59,19 +59,57 @@ namespace MusikProgramm
             //TODO: look how to do it
         }
 
-        public void nextSong()
+        public Song nextSong(bool firstStart)
         {
-            //TODO
+            if (firstStart)
+            {
+                foreach (Song song in SongListSorted)
+                {
+                    if (song.Progress != null)
+                    {
+                        currentSong = SongListSorted.IndexOf(song);
+                        return song;
+                    }
+                }
+                return SongListSorted[0];
+            }
+            else if (Repeat)
+            {
+                return SongListSorted[currentSong];
+            }
+            else
+            {
+                currentSong++;
+                return SongListSorted[currentSong];
+            }
         }
 
-        public void previousSong()
+        public Song previousSong()
         {
-            //TODO
+            currentSong--;
+            return SongListSorted[currentSong];
         }
 
         public void serialized()
         {
             //TODO
+        }
+
+        public void stop(int progress)
+        {
+            SongListSorted[currentSong].Progress = progress;
+        }
+
+        public void shuffle()
+        {
+            List<Song> list = SongListSorted;
+
+            // TODO
+        }
+
+        public void resetShuffleSort()
+        {
+            SongListSorted = SongList;
         }
     }
 }
