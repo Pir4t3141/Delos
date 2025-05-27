@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Markup;
-using Microsoft.VisualBasic.Logging;
 using NAudio;
 using NAudio.Wave;
 using TagLib; //for metadata
