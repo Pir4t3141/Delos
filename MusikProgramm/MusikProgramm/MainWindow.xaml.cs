@@ -90,5 +90,10 @@ namespace MusikProgramm
 
 
         }
+
+        private void ListViewPlaylists_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // view playlist
+        }
     }
 }

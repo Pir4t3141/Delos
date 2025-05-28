@@ -33,7 +33,7 @@
             <Button Content="View all Songs" Width="100" Height="30" Margin="5" HorizontalAlignment="Center"/> <!-- Mit diesem Knopf kann man später alle Songs einzeln anzeigen -->
         </DockPanel>
 
-        <ListView x:Name="ListViewPlaylists" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="Blue" >
+        <ListView x:Name="ListViewPlaylists" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="Blue" MouseDoubleClick="ListViewPlaylists_MouseDoubleClick">
         </ListView>
     </Grid>
 </Window>
