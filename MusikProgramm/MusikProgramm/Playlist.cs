@@ -38,11 +38,11 @@ namespace MusikProgramm
             private set { }
         } 
 
-        public List<Song> SongList { get; set; }
+        public List<Song> SongList { get; set; } = new List<Song>();
 
         public int currentSong { get; set; } = 0;
 
-        public List<Song> SongListSorted { get; set; } // TODO: Make it so that it is songlist on start
+        public List<Song> SongListSorted { get; set; } = new List<Song>(); // TODO: Make it so that it is songlist on start
         
         public Playlist(string name)
         {
@@ -64,11 +64,13 @@ namespace MusikProgramm
                         string line = sr.ReadLine();
                         if (!string.IsNullOrEmpty(line))
                         {
-                            Song song = new Song(line);
+                            Log.Debug(line);
+                            Song song = Song.deserialize(line);
                             playlist.SongList.Add(song);
                         }
                     }
                 }
+                playlist.SongListSorted = playlist.SongList;
                 return playlist;
             }
             catch
@@ -78,7 +80,7 @@ namespace MusikProgramm
             }
         }
 
-        public void save(string path)
+        public void save()
         {
             // using char "]" because it is in no name of a playlist
             using (StreamWriter sw = new StreamWriter($"{Name.Replace(" ", "]")}.txt")) // TODO: find better file format
@@ -95,11 +97,13 @@ namespace MusikProgramm
         public void addSong(Song song)
         {
             SongList.Add(song);
+            SongListSorted.Add(song);
         }
 
         public void removeSong(Song song)
         {
             SongList.Remove(song);
+            SongListSorted.Remove(song);
         }
 
         public Song skip()
