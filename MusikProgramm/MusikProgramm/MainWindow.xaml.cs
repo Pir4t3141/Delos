@@ -39,7 +39,7 @@ namespace MusikProgramm
 
             Log.Logger = new LoggerConfiguration().
                 MinimumLevel.Debug().
-                WriteTo.File("stopwatch.log", rollingInterval: RollingInterval.Month).
+                WriteTo.File("musikprogramm.log", rollingInterval: RollingInterval.Month).
                 CreateLogger();
 
             Log.Debug("Started MainWindow");

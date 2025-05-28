@@ -9,6 +9,7 @@ using System.Windows.Markup;
 using NAudio;
 using NAudio.Wave;
 using TagLib; //for metadata
+using Serilog;
 
 namespace MusikProgramm
 {
@@ -21,13 +22,13 @@ namespace MusikProgramm
         public int Length
         {
             get {
-                return Convert.ToInt32(new AudioFileReader(Path).TotalTime); //TODO: Fix
+                return Convert.ToInt32(new AudioFileReader(Path).TotalTime.TotalSeconds); //TODO: Fix
             }
 
             private set {}
         }
 
-        public uint ReleaseYear { get; set; } // Year of release
+        public uint ReleaseYear { get; set; } // Year of releasea
         public string[] Artists { get; set; } // Name of artists
         public string Path { get; set; } // Path of file
 
@@ -71,17 +72,36 @@ namespace MusikProgramm
         {
             //Name]Length]ReleaseYear]Path]Progress]Album]Artist1[Artist2[Artist3[....
             //Seperate with ] because no title/Name of artist contains ] (to my knowledge)
-            string serialized = $"{Name}]{Length}]{ReleaseYear}]{Path}]{Progress}]{Album}]";
-            foreach (string artist in Artists)
+            if (String.IsNullOrEmpty(Name))
             {
-                serialized += $"{artist}[";
+                Name = "noNameGiven";
+            }
+            if (String.IsNullOrEmpty(Album))
+            {
+                Album = "noAlbumGiven";
+            }
+            string serialized = $"{Name}]{Length}]{ReleaseYear}]{Path}]{Progress}]{Album}]";
+            
+            if (Artists != null && Artists.Length > 0)
+            {
+                foreach (string artist in Artists)
+                {
+                    serialized += $"{artist}[";
+                }
+            }
+            else
+            {
+                serialized += "noArtistsGiven";
+                Log.Error("No artists Serialized");
             }
 
-            return serialized; //TODO Correct Return
+            return serialized;
         }
 
         public static Song deserialize(string SerializedString) // TODO: Ask Teacher if faster than reading metadata 
         {
+
+            //]17]0]C:\Users\Familie_Reichart\Downloads\epic.mp3]]]
             string[] strings = SerializedString.Split(']'); // no try{}catch{} needed: add in playlist class TODO: Add in Playlist class
             Song song = new Song(strings[3])
             {
@@ -90,7 +110,7 @@ namespace MusikProgramm
                 ReleaseYear = Convert.ToUInt32(strings[2]),
                 Album = strings[5]
             };
-            if (strings[4] == "null")
+            if (string.IsNullOrEmpty(strings[4]))
             {
                 song.Progress = null;
             }
