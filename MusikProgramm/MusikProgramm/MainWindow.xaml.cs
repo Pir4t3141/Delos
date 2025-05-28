@@ -33,6 +33,8 @@ namespace MusikProgramm
         public WasapiOut outputDevice;
 
         private List<Playlist> playlists = new List<Playlist>();
+        private Playlist? currentPlaylist;
+        private bool repeat;
         public MainWindow()
         {
             InitializeComponent();
@@ -44,17 +46,23 @@ namespace MusikProgramm
                 CreateLogger();
 
             Log.Debug("Started MainWindow");
-            // TODO: Delete Following commet (Adding playlist for test purposes)
-            /* Adds Playlist for Test Purposes
-            Playlist pltest = new Playlist("PlaylistTest");
-            pltest.addSong(new Song("C:\\Users\\Familie_Reichart\\Downloads\\epic.mp3"));
 
-            Playlist pltest2 = new Playlist("PlaylistTest2");
-            pltest2.addSong(new Song("C:\\Users\\Familie_Reichart\\Downloads\\epic.mp3"));
+            
+            Playlist playlistAJR = new Playlist("AJR");
+            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\tf_nemesis.mp3"));
+            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - BANG! (Official Video).mp3"));
+            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - World's Smallest Violin (Official Video).mp3"));
+            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - Yes I'm A Mess (Official Video).mp3"));
+            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - BANG! (Official Video).mp3"));
+            playlistAJR.Save();
 
-            pltest.save();
-            pltest2.save();*/
-
+            Playlist playlistAJR2 = new Playlist("AJR2");
+            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\tf_nemesis.mp3"));
+            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - World's Smallest Violin (Official Video).mp3"));
+            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - BANG! (Official Video).mp3"));
+            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - Yes I'm A Mess (Official Video).mp3"));
+            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - BANG! (Official Video).mp3"));
+            playlistAJR2.Save();
 
             // Loads in all Playlists
             if (Directory.Exists("Playlists") && Directory.GetFiles("Playlists") != null)
@@ -88,12 +96,47 @@ namespace MusikProgramm
                 Log.Debug("No Playlists exist");
             }
 
+            UserControlPlayPauseSkip.mainWindow = this;
+        }
 
+        private void OutputDevice_PlaybackStopped(object? sender, StoppedEventArgs e)
+        {
+            // next song
+
+            Song nextSong = currentPlaylist.NextSong(false);
+            audiofile = new AudioFileReader(nextSong.Path);
+            outputDevice = new WasapiOut();
+            outputDevice.Init(audiofile);
+            outputDevice.Play();
+            UserControlPlayPauseSkip.ResetAfterPlaylistSwitch();
         }
 
         private void ListViewPlaylists_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // view playlist
+        }
+
+        private void ListViewPlaylists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Switch Playlist
+            currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
+
+            if (currentPlaylist != null)
+            {
+                if (outputDevice != null)
+                {
+                    outputDevice.Stop();
+                    currentPlaylist.currentSong = 0; // TODO: Remove this, add progress
+                }
+                Song song = currentPlaylist.NextSong(true); // starts playlist
+                audiofile = new AudioFileReader(song.Path);
+                outputDevice = new WasapiOut();
+                outputDevice.Init(audiofile);
+                outputDevice.Play();
+
+                outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
+                UserControlPlayPauseSkip.ResetAfterPlaylistSwitch();
+            }
         }
     }
 }
