@@ -40,7 +40,7 @@ Auch können Songs bzw Audios in das Programm hochgeladen werden
 | 14.05 | Grundaufbau der Klassen & Überarbeitung der Planung | Tobias | 0% |
 | 21.05 | Verbessern des Designs | Chiara | 0% |
 | 28.05 | User Control für Play Pause usw. | Chiara | 0% |
-| Inhalt 5 | Inhalt 6 | Inhalt 7 | Inhalt 8 |
+| 27.05 + 28.05 | Klassen so gut wie fertig coden | Tobias | 0% |
 | Inhalt 9 | Inhalt 10| Inhalt 11| Inhalt 12|
 
 
