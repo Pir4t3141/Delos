@@ -10,7 +10,8 @@ namespace MusikProgramm
 {
     public class Playlist
     {
-        public int SongAnzahl
+        private string DirectoryName = "Playlists";
+        public int SongNumber
         {
             get {
                 return SongList.Count();
@@ -49,10 +50,12 @@ namespace MusikProgramm
             Name = name;
         }
 
-        public static Playlist import(string path)
+        public static Playlist Import(string path)
         {
             string[] pathSplit = path.Split('.');
-            Playlist playlist = new Playlist(pathSplit[0]);
+            string[] pathSplitName = pathSplit[0].Split("\\");
+            Log.Debug($"Name of Playlist when importing: {pathSplitName[1]}");
+            Playlist playlist = new Playlist(pathSplitName[1]);
             Log.Debug(pathSplit[0]);
 
             try
@@ -65,7 +68,7 @@ namespace MusikProgramm
                         if (!string.IsNullOrEmpty(line))
                         {
                             Log.Debug(line);
-                            Song song = Song.deserialize(line);
+                            Song song = Song.Deserialize(line);
                             playlist.SongList.Add(song);
                         }
                     }
@@ -80,44 +83,47 @@ namespace MusikProgramm
             }
         }
 
-        public void save()
+        public void Save()
         {
             // using char "]" because it is in no name of a playlist
-            using (StreamWriter sw = new StreamWriter($"{Name.Replace(" ", "]")}.txt")) // TODO: find better file format
+            if (!Directory.Exists(DirectoryName)){
+                Directory.CreateDirectory(DirectoryName);
+            }
+            using (StreamWriter sw = new StreamWriter($"{DirectoryName}//{Name.Replace(" ", "]")}.txt")) // TODO: find better file format
             {
                 Log.Debug("Saving Playlist");
                 foreach (Song song in SongList)
                 {
                     //Name]Length]ReleaseYear]Path]Progress]Album]Artist1[Artist2[Artist3[....
-                    sw.WriteLine(song.serializeToString());
+                    sw.WriteLine(song.SerializeToString());
                 }
             }
         }
 
-        public void addSong(Song song)
+        public void AddSong(Song song)
         {
             SongList.Add(song);
             SongListSorted.Add(song);
         }
 
-        public void removeSong(Song song)
+        public void RemoveSong(Song song)
         {
             SongList.Remove(song);
             SongListSorted.Remove(song);
         }
 
-        public Song skip()
+        public Song Skip()
         {
             currentSong += 1;
             return SongListSorted[currentSong];
         }
 
-        public void sort()
+        public void Sort()
         {
             //TODO: look how to do it
         }
 
-        public Song nextSong(bool firstStart)
+        public Song NextSong(bool firstStart)
         {
             if (firstStart)
             {
@@ -142,23 +148,23 @@ namespace MusikProgramm
             }
         }
 
-        public Song previousSong()
+        public Song PreviousSong()
         {
             currentSong--;
             return SongListSorted[currentSong];
         }
 
-        public void serialize()
+        public void Serialize()
         {
             // TODO: find out what to do here
         }
 
-        public void stop(int progress)
+        public void Stop(int progress)
         {
             SongListSorted[currentSong].Progress = progress;
         }
 
-        public void shuffle()
+        public void Shuffle()
         {
             Log.Debug($"Before shuffle: {SongListSorted}");
             List<Song> list = SongListSorted;
@@ -177,10 +183,15 @@ namespace MusikProgramm
             Log.Debug($"After shuffle: {SongListSorted}");
         }
 
-        public void resetShuffleSort()
+        public void ResetShuffleSort()
         {
             Log.Debug("Reset shuffle");
             SongListSorted = SongList;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}, {SongNumber} Songs, Playtime: {Playtime}";
         }
     }
 }

@@ -22,7 +22,7 @@ namespace MusikProgramm
         public int Length
         {
             get {
-                return Convert.ToInt32(new AudioFileReader(Path).TotalTime.TotalSeconds); //TODO: Fix
+                return Convert.ToInt32(new AudioFileReader(Path).TotalTime.TotalSeconds);
             }
 
             private set {}
@@ -38,10 +38,10 @@ namespace MusikProgramm
 
         public Song(string path){
             Path = path;
-            loadFromMetaData();
+            LoadFromMetaData();
         } 
 
-        public void loadFromMetaData()
+        public void LoadFromMetaData()
         {
             TagLib.File TaglibFile = TagLib.File.Create(Path);
             TagLib.Tag FileTag = TaglibFile.Tag; // metadata
@@ -52,7 +52,7 @@ namespace MusikProgramm
             ReleaseYear = FileTag.Year; // unsigned integer (year can't be negative)
         }
 
-        public void editMetaData()
+        public void EditMetaData()
         {
             TagLib.File TaglibFile = TagLib.File.Create(Path);
             TagLib.Tag FileTag = TaglibFile.Tag; // metadata
@@ -68,7 +68,7 @@ namespace MusikProgramm
             return $"{Name} released on {ReleaseYear} by {string.Join(",", Artists)}";
         }
         
-        public string serializeToString()
+        public string SerializeToString()
         {
             //Name]Length]ReleaseYear]Path]Progress]Album]Artist1[Artist2[Artist3[....
             //Seperate with ] because no title/Name of artist contains ] (to my knowledge)
@@ -98,7 +98,7 @@ namespace MusikProgramm
             return serialized;
         }
 
-        public static Song deserialize(string SerializedString) // TODO: Ask Teacher if faster than reading metadata 
+        public static Song Deserialize(string SerializedString) // TODO: Ask Teacher if faster than reading metadata 
         {
 
             //]17]0]C:\Users\Familie_Reichart\Downloads\epic.mp3]]]
