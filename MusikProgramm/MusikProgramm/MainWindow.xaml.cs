@@ -55,6 +55,8 @@ namespace MusikProgramm
             pltest.save();
             pltest2.save();*/
 
+            Playlist playlist1 = new Playlist("Sigma");
+            playlist1.Save();
 
             // Loads in all Playlists
             if (Directory.Exists("Playlists") && Directory.GetFiles("Playlists") != null)
