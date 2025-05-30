@@ -18,19 +18,18 @@
             <RowDefinition Height="2*"/> <!-- 2 Spalte für Playlists -->
             <RowDefinition Height="*"/> <!-- Hier kommen Buttons und so ähnlich hin wie zb Add -->
             <RowDefinition Height="*"/> <!-- Hier kommst später die Musikwiedergabe hin -->
-          
-
         </Grid.RowDefinitions>
 
         
 
         <Label Grid.ColumnSpan="2" Content="Musik - Programm" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Bauhaus 93"/>
 
-        <DockPanel Grid.Column="0" Grid.Row="3">
-            <Button Content="Add Playlist" Width="100" Height="30" Margin="5" HorizontalAlignment="Left"/>
+        <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="2">
+            <Button x:Name="ButtonAdd" Content="Add Playlist" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonAdd_Click"/>
             <Button Content="Delete Playlist" Width="100" Height="30" Margin="5" HorizontalAlignment="Left"/>
+            <Button Content="Edit Playlist" Width="100" Height="30" Margin="5" HorizontalAlignment="Left"/>
             <Button Content="View all Songs" Width="100" Height="30" Margin="5" HorizontalAlignment="Center"/> <!-- Mit diesem Knopf kann man später alle Songs einzeln anzeigen -->
-        </DockPanel>
+        </StackPanel>
 
         <local:PlayPauseSkip x:Name="UserControlPlayPauseSkip" Grid.Row="4" Grid.ColumnSpan="2"/>
         <ListView x:Name="ListViewPlaylists" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="SlateBlue" MouseDoubleClick="ListViewPlaylists_MouseDoubleClick" SelectionChanged="ListViewPlaylists_SelectionChanged"/>

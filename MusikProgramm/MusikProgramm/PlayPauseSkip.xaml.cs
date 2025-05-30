@@ -41,8 +41,7 @@ namespace MusikProgramm
 
         private void ButtonPlayPause_Click(object sender, RoutedEventArgs e)
         {
-            // Doesn't work completely TODO: Fix when switching between playlists and playing/pausing to fast
-            if (mainWindow.outputDevice != null)
+            if (mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
             {
                 if (mainWindow.outputDevice.PlaybackState == PlaybackState.Playing)
                 {
@@ -55,6 +54,8 @@ namespace MusikProgramm
                     mainWindow.outputDevice.Play();
                 }
             }
+            // Doesn't work completely TODO: Fix when switching between playlists and playing/pausing to fast
+
         }
 
         private void ButtonShuffle_Click(object sender, RoutedEventArgs e)

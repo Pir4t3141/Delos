@@ -1,0 +1,27 @@
+﻿<Window x:Class="MusikProgramm.WindowAddEditPlaylist"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MusikProgramm"
+        mc:Ignorable="d"
+        Title="WindowAddEditPlaylist" Height="100" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Name:" Height="30px"/>
+        <TextBox x:Name="TextBoxName" Grid.Column="1" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxName_TextChanged"/>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="ButtonCancel" Content="Cancel" Height="30px" Width="100px" Margin="0 0 20 0" Click="ButtonCancel_Click"/>
+            <Button x:Name="ButtonAdd" Content="Add" Height="30px" Width="100px" Margin="0 0 10 0" Click="ButtonAdd_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

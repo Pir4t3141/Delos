@@ -33,7 +33,7 @@ namespace MusikProgramm
         public WasapiOut outputDevice;
 
         private List<Playlist> playlists = new List<Playlist>();
-        private Playlist? currentPlaylist;
+        public Playlist? currentPlaylist;
         private bool repeat;
         public MainWindow()
         {
@@ -46,23 +46,6 @@ namespace MusikProgramm
                 CreateLogger();
 
             Log.Debug("Started MainWindow");
-
-            
-            Playlist playlistAJR = new Playlist("AJR");
-            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\tf_nemesis.mp3"));
-            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - BANG! (Official Video).mp3"));
-            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - World's Smallest Violin (Official Video).mp3"));
-            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - Yes I'm A Mess (Official Video).mp3"));
-            playlistAJR.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - BANG! (Official Video).mp3"));
-            playlistAJR.Save();
-
-            Playlist playlistAJR2 = new Playlist("AJR2");
-            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\tf_nemesis.mp3"));
-            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - World's Smallest Violin (Official Video).mp3"));
-            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - BANG! (Official Video).mp3"));
-            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - Yes I'm A Mess (Official Video).mp3"));
-            playlistAJR2.AddSong(new Song("C:\\Users\\ratte\\Downloads\\AJR - BANG! (Official Video).mp3"));
-            playlistAJR2.Save();
 
             // Loads in all Playlists
             if (Directory.Exists("Playlists") && Directory.GetFiles("Playlists") != null)
@@ -102,7 +85,6 @@ namespace MusikProgramm
         private void OutputDevice_PlaybackStopped(object? sender, StoppedEventArgs e)
         {
             // next song
-
             Song nextSong = currentPlaylist.NextSong(false);
             audiofile = new AudioFileReader(nextSong.Path);
             outputDevice = new WasapiOut();
@@ -114,20 +96,35 @@ namespace MusikProgramm
         private void ListViewPlaylists_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // view playlist
+
+            currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
+            if (currentPlaylist != null)
+            {
+                WindowPlaylist playlistWindow = new WindowPlaylist(currentPlaylist);
+                playlistWindow.Show();
+            }
+            else
+            {
+                Log.Debug("No playlist detected");
+            }
         }
 
         private void ListViewPlaylists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Switch Playlist
+            if (outputDevice != null)
+            {
+                outputDevice.PlaybackStopped -= OutputDevice_PlaybackStopped; // TODO: Hier Lehrer fragen warum benötigt
+                outputDevice.Stop();
+                outputDevice.Dispose();
+                outputDevice = null;
+            }
+
             currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
 
-            if (currentPlaylist != null)
+            if (currentPlaylist != null && currentPlaylist.SongList.Count >= 1)
             {
-                if (outputDevice != null)
-                {
-                    outputDevice.Stop();
-                    currentPlaylist.currentSong = 0; // TODO: Remove this, add progress
-                }
+                currentPlaylist.currentSong = 0; // TODO: Remove this, add progress
                 Song song = currentPlaylist.NextSong(true); // starts playlist
                 audiofile = new AudioFileReader(song.Path);
                 outputDevice = new WasapiOut();
@@ -136,6 +133,30 @@ namespace MusikProgramm
 
                 outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
                 UserControlPlayPauseSkip.ResetAfterPlaylistSwitch();
+            }
+        }
+
+        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            WindowAddEditPlaylist windowAddPlaylist = new WindowAddEditPlaylist();
+
+            if (windowAddPlaylist.ShowDialog() == true)
+            {
+                String? Name = windowAddPlaylist.Name;
+                if (Name != null)
+                {
+                    playlists.Add(new Playlist(Name));
+                }
+            }
+            UpdateListView();
+        }
+
+        private void UpdateListView()
+        {
+            ListViewPlaylists.Items.Clear();
+            foreach (Playlist playlist in playlists)
+            {
+                ListViewPlaylists.Items.Add(playlist);
             }
         }
     }
