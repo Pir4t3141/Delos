@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TagLib.Mpeg;
 
 namespace MusikProgramm
 {
@@ -41,7 +42,7 @@ namespace MusikProgramm
 
         private void ButtonPlayPause_Click(object sender, RoutedEventArgs e)
         {
-            if (mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
             {
                 if (mainWindow.outputDevice.PlaybackState == PlaybackState.Playing)
                 {
@@ -60,22 +61,66 @@ namespace MusikProgramm
 
         private void ButtonShuffle_Click(object sender, RoutedEventArgs e)
         {
-
+            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            {
+                if (mainWindow.shuffle == false)
+                {
+                    mainWindow.shuffle = true;
+                    mainWindow.currentPlaylist.Shuffle();
+                }
+                else
+                {
+                    mainWindow.shuffle = false;
+                    mainWindow.currentPlaylist.ResetShuffleSort();
+                }
+            }
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-
+            var prevPlaybState = mainWindow.outputDevice.PlaybackState;
+            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            {
+                Song nextSong = mainWindow.currentPlaylist.PreviousSong();
+                mainWindow.StopOutputDevice();
+                mainWindow.PlaySong(nextSong);
+                if (prevPlaybState == PlaybackState.Paused)
+                {
+                    mainWindow.outputDevice.Pause();
+                }
+            }
         }
 
         private void ButtonSkip_Click(object sender, RoutedEventArgs e)
         {
-
+            var prevPlaybState = mainWindow.outputDevice.PlaybackState;
+            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            {
+                Song nextSong = mainWindow.currentPlaylist.Skip();
+                mainWindow.StopOutputDevice();
+                mainWindow.PlaySong(nextSong);
+                if (prevPlaybState == PlaybackState.Paused)
+                {
+                    mainWindow.outputDevice.Pause();
+                }
+            }
         }
 
         private void ButtonRepeat_Click(object sender, RoutedEventArgs e)
         {
-
+            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            {
+                if (mainWindow.currentPlaylist.Repeat == false)
+                {
+                    mainWindow.currentPlaylist.Repeat = true;
+                    ButtonRepeat.Background = Brushes.Green;
+                }
+                else
+                {
+                    mainWindow.currentPlaylist.Repeat = false;
+                    ButtonRepeat.Background = null;
+                }
+            }
         }
 
         public void ResetAfterPlaylistSwitch()

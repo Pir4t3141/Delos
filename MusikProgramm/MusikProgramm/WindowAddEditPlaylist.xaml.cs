@@ -19,16 +19,40 @@ namespace MusikProgramm
     /// </summary>
     public partial class WindowAddEditPlaylist : Window
     {
+        MainWindow mainWindow;
         public string Name;
-        public WindowAddEditPlaylist()
+        private bool Contains = false;
+
+        public WindowAddEditPlaylist(MainWindow mainWindow)
         {
             InitializeComponent();
+            this.mainWindow = mainWindow;
         }
 
         private void TextBoxName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!String.IsNullOrEmpty(TextBoxName.Text))
+            bool _contains = false;
+
+            foreach (Playlist playlist in mainWindow.playlists)
             {
+                if (playlist.Name == TextBoxName.Text)
+                {
+                    _contains = true;
+                }
+            }
+
+            if (_contains)
+            {
+                Contains = true;
+            }
+            else
+            {
+                Contains = false;
+            }
+
+            if (!String.IsNullOrEmpty(TextBoxName.Text) && !Contains)
+            {
+
                 TextBoxName.Background = null;
             }
             else

@@ -19,10 +19,13 @@ namespace MusikProgramm
     /// </summary>
     public partial class WindowPlaylist : Window
     {
-        private Playlist playlist;  
+        private Playlist playlist;
+        public MainWindow mainWindow;
+
         public WindowPlaylist(Playlist playlist)
         {
             InitializeComponent();
+
             this.playlist = playlist;
             LabelName.Content = playlist.Name;
 

@@ -32,9 +32,10 @@ namespace MusikProgramm
         public AudioFileReader audiofile;
         public WasapiOut outputDevice;
 
-        private List<Playlist> playlists = new List<Playlist>();
+        public List<Playlist> playlists { get; private set; } = new List<Playlist>();
         public Playlist? currentPlaylist;
-        private bool repeat;
+        public bool shuffle;
+        private WindowPlaylist ?playlistWindow;
         public MainWindow()
         {
             InitializeComponent();
@@ -84,24 +85,22 @@ namespace MusikProgramm
 
         private void OutputDevice_PlaybackStopped(object? sender, StoppedEventArgs e)
         {
-            // next song
             Song nextSong = currentPlaylist.NextSong(false);
-            audiofile = new AudioFileReader(nextSong.Path);
-            outputDevice = new WasapiOut();
-            outputDevice.Init(audiofile);
-            outputDevice.Play();
-            UserControlPlayPauseSkip.ResetAfterPlaylistSwitch();
+            PlaySong(nextSong);
         }
 
         private void ListViewPlaylists_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // view playlist
 
-            currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
-            if (currentPlaylist != null)
+            //currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
+
+            if (currentPlaylist != null && playlistWindow == null)
             {
-                WindowPlaylist playlistWindow = new WindowPlaylist(currentPlaylist);
+                playlistWindow = new WindowPlaylist(currentPlaylist);
+                playlistWindow.mainWindow = this;
                 playlistWindow.Show();
+                playlistWindow.Closed += PlaylistWindow_Closed;
             }
             else
             {
@@ -109,36 +108,32 @@ namespace MusikProgramm
             }
         }
 
+        private void PlaylistWindow_Closed(object? sender, EventArgs e)
+        {
+            playlistWindow = null;
+        }
+
         private void ListViewPlaylists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Switch Playlist
-            if (outputDevice != null)
+            if (outputDevice!= null)
             {
-                outputDevice.PlaybackStopped -= OutputDevice_PlaybackStopped; // TODO: Hier Lehrer fragen warum benötigt
-                outputDevice.Stop();
-                outputDevice.Dispose();
-                outputDevice = null;
+                StopOutputDevice();
             }
 
             currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
 
             if (currentPlaylist != null && currentPlaylist.SongList.Count >= 1)
             {
-                currentPlaylist.currentSong = 0; // TODO: Remove this, add progress
                 Song song = currentPlaylist.NextSong(true); // starts playlist
-                audiofile = new AudioFileReader(song.Path);
-                outputDevice = new WasapiOut();
-                outputDevice.Init(audiofile);
-                outputDevice.Play();
-
-                outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
+                PlaySong(song);
                 UserControlPlayPauseSkip.ResetAfterPlaylistSwitch();
             }
         }
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            WindowAddEditPlaylist windowAddPlaylist = new WindowAddEditPlaylist();
+            WindowAddEditPlaylist windowAddPlaylist = new WindowAddEditPlaylist(this);
 
             if (windowAddPlaylist.ShowDialog() == true)
             {
@@ -158,6 +153,23 @@ namespace MusikProgramm
             {
                 ListViewPlaylists.Items.Add(playlist);
             }
+        }
+
+        public void PlaySong(Song nextSong)
+        {
+            audiofile = new AudioFileReader(nextSong.Path);
+            outputDevice = new WasapiOut();
+            outputDevice.Init(audiofile);
+            outputDevice.Play();
+            outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
+        }
+
+        public void StopOutputDevice()
+        {
+            outputDevice.PlaybackStopped -= OutputDevice_PlaybackStopped; // sonst wird das event beim stoppen ausgelöst
+            outputDevice.Stop();
+            outputDevice.Dispose();
+            outputDevice = null;
         }
     }
 }
