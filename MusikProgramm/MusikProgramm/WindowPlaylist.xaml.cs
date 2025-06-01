@@ -22,11 +22,13 @@ namespace MusikProgramm
         private Playlist playlist;
         public MainWindow mainWindow;
 
-        public WindowPlaylist(Playlist playlist)
+        public WindowPlaylist(Playlist playlist, MainWindow mainWindow)
         {
             InitializeComponent();
 
             this.playlist = playlist;
+            this.mainWindow = mainWindow;
+            UserControlPlayPauseSkip.mainWindow = mainWindow;
             LabelName.Content = playlist.Name;
 
             foreach (Song song in playlist.SongListSorted)

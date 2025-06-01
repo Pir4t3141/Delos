@@ -15,6 +15,7 @@
     <None Remove="images\play.png" />
     <None Remove="images\repeat_thick.png" />
     <None Remove="images\repeat_thin.png" />
+    <None Remove="images\repeat_thin_on.png" />
     <None Remove="images\shuffle_thick.png" />
     <None Remove="images\shuffle_thin.png" />
   </ItemGroup>
@@ -45,7 +46,13 @@
     <Content Include="images\repeat_thin.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="images\repeat_thin_on.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="images\shuffle_thick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\shuffle_thin_on.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="images\shuffle_thin.png">

@@ -26,18 +26,28 @@ namespace MusikProgramm
 
         private ImageBrush imageBrushPlay = new ImageBrush();
         private ImageBrush imageBrushPause = new ImageBrush();
+        private ImageBrush imageBrushRepeat = new ImageBrush();
+        private ImageBrush imageBrushRepeatOn = new ImageBrush();
+        private ImageBrush imageBrushShuffle = new ImageBrush();
+        private ImageBrush imageBrushShuffleOn = new ImageBrush();
+
+
         public PlayPauseSkip()
         {
             InitializeComponent();
+            
+            imageBrushPlay = InitializeImageBrush(imageBrushPlay, "images//play.png");
 
-            imageBrushPlay.ImageSource = new BitmapImage(new Uri("images//play.png", UriKind.Relative));
-            imageBrushPause.ImageSource = new BitmapImage(new Uri("images//pause.png", UriKind.Relative));
+            imageBrushPause = InitializeImageBrush(imageBrushPause, "images//pause.png");
 
-            imageBrushPlay.Stretch = Stretch.Uniform;
-            imageBrushPause.Stretch = Stretch.Uniform;
+            imageBrushRepeat = InitializeImageBrush(imageBrushRepeat, "images//repeat_thin.png");
 
-            imageBrushPlay.TileMode = TileMode.None;
-            imageBrushPause.TileMode = TileMode.None;
+            imageBrushRepeatOn = InitializeImageBrush(imageBrushRepeatOn, "images//repeat_thin_on.png");
+
+            imageBrushShuffle = InitializeImageBrush(imageBrushShuffle, "images//shuffle_thin.png");
+
+            imageBrushShuffleOn = InitializeImageBrush(imageBrushShuffleOn, "images//shuffle_thin_on.png");
+
         }
 
         private void ButtonPlayPause_Click(object sender, RoutedEventArgs e)
@@ -67,11 +77,13 @@ namespace MusikProgramm
                 {
                     mainWindow.shuffle = true;
                     mainWindow.currentPlaylist.Shuffle();
+                    ButtonShuffle.Background = imageBrushShuffleOn;
                 }
                 else
                 {
                     mainWindow.shuffle = false;
                     mainWindow.currentPlaylist.ResetShuffleSort();
+                    ButtonShuffle.Background = imageBrushShuffle;
                 }
             }
         }
@@ -114,11 +126,13 @@ namespace MusikProgramm
                 {
                     mainWindow.currentPlaylist.Repeat = true;
                     ButtonRepeat.Background = Brushes.Green;
+                    ButtonRepeat.Background = imageBrushRepeatOn;
                 }
                 else
                 {
                     mainWindow.currentPlaylist.Repeat = false;
                     ButtonRepeat.Background = null;
+                    ButtonRepeat.Background = imageBrushRepeat;
                 }
             }
         }
@@ -126,6 +140,14 @@ namespace MusikProgramm
         public void ResetAfterPlaylistSwitch()
         {
             ButtonPlayPause.Background = imageBrushPause;
+        }
+
+        private ImageBrush InitializeImageBrush(ImageBrush imageBrush, String pathImage)
+        {
+            imageBrush.Stretch = Stretch.Uniform;
+            imageBrush.TileMode = TileMode.None;
+            imageBrush.ImageSource = new BitmapImage(new Uri(pathImage, UriKind.Relative));
+            return imageBrush;
         }
     }
 }

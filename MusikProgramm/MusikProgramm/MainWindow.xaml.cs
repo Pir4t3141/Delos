@@ -97,7 +97,7 @@ namespace MusikProgramm
 
             if (currentPlaylist != null && playlistWindow == null)
             {
-                playlistWindow = new WindowPlaylist(currentPlaylist);
+                playlistWindow = new WindowPlaylist(currentPlaylist, this);
                 playlistWindow.mainWindow = this;
                 playlistWindow.Show();
                 playlistWindow.Closed += PlaylistWindow_Closed;
