@@ -82,7 +82,5 @@ namespace MusikProgramm
 
             UserControlPlayPauseSkip.mainWindow = this;
         }
-
-        }
     }
 }
