@@ -17,34 +17,24 @@
             <ColumnDefinition Width="2.5*"/>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="1" x:Name="ButtonShuffle" Click="ButtonShuffle_Click" Margin="2px">
-            <Button.Background>
-                <ImageBrush ImageSource="/images/shuffle_thin.png" Stretch="Uniform" TileMode="None"/>
-            </Button.Background>
+        <Button Grid.Column="1" x:Name="ButtonShuffle" Click="ButtonShuffle_Click" Margin="2px" Background="White">
+            <Image Source="/images/shuffle_thin.png"/>
         </Button>
 
-        <Button Grid.Column="2" x:Name="ButtonBack" Click="ButtonBack_Click" Margin="2px">
-            <Button.Background>
-                <ImageBrush ImageSource="/images/backward.png" Stretch="Uniform" TileMode="None"/>
-            </Button.Background>
+        <Button Grid.Column="2" x:Name="ButtonPrevious" Click="ButtonPrevious_Click" Margin="2px" Background="White">
+            <Image Source="/images/backward.png"/>
         </Button>
 
-        <Button Grid.Column="3" x:Name="ButtonPlayPause" Click="ButtonPlayPause_Click" Margin="2px">
-            <Button.Background>
-                <ImageBrush ImageSource="/images/play.png" Stretch="Uniform" TileMode="None"/>
-            </Button.Background>
+        <Button Grid.Column="3" x:Name="ButtonPlayPause" Click="ButtonPlayPause_Click" Margin="2px" Background="White">
+            <Image Source="/images/play.png"/>
         </Button>
 
-        <Button Grid.Column="4" x:Name="ButtonSkip" Click="ButtonSkip_Click" Margin="2px">
-            <Button.Background>
-                <ImageBrush ImageSource="/images/forward.png" Stretch="Uniform" TileMode="None"/>
-            </Button.Background>
+        <Button Grid.Column="4" x:Name="ButtonSkip" Click="ButtonSkip_Click" Margin="2px" Background="White">
+            <Image Source="/images/forward.png"/>
         </Button>
 
-        <Button Grid.Column="5" x:Name="ButtonRepeat" Click="ButtonRepeat_Click" Margin="2px">
-            <Button.Background>
-                <ImageBrush ImageSource="/images/repeat_thin.png" Stretch="Uniform" TileMode="None"/>
-            </Button.Background>
+        <Button Grid.Column="5" x:Name="ButtonRepeat" Click="ButtonRepeat_Click" Margin="2px" Background="White">
+            <Image Source="/images/repeat_thin.png"/>
         </Button>
        
         

@@ -1,6 +1,7 @@
 ﻿using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,137 +18,87 @@ using TagLib.Mpeg;
 
 namespace MusikProgramm
 {
-    /// <summary>
-    /// Interaction logic for PlayPauseSkip.xaml
-    /// </summary>
+    /// <summary>  
+    /// Interaction logic for PlayPauseSkip.xaml  
+    /// </summary>  
     public partial class PlayPauseSkip : UserControl
     {
-        public MainWindow mainWindow;
-
-        private ImageBrush imageBrushPlay = new ImageBrush();
-        private ImageBrush imageBrushPause = new ImageBrush();
-        private ImageBrush imageBrushRepeat = new ImageBrush();
-        private ImageBrush imageBrushRepeatOn = new ImageBrush();
-        private ImageBrush imageBrushShuffle = new ImageBrush();
-        private ImageBrush imageBrushShuffleOn = new ImageBrush();
+        public Player? player = null;
 
 
         public PlayPauseSkip()
         {
             InitializeComponent();
-            
-            imageBrushPlay = InitializeImageBrush(imageBrushPlay, "images//play.png");
+        }
 
-            imageBrushPause = InitializeImageBrush(imageBrushPause, "images//pause.png");
-
-            imageBrushRepeat = InitializeImageBrush(imageBrushRepeat, "images//repeat_thin.png");
-
-            imageBrushRepeatOn = InitializeImageBrush(imageBrushRepeatOn, "images//repeat_thin_on.png");
-
-            imageBrushShuffle = InitializeImageBrush(imageBrushShuffle, "images//shuffle_thin.png");
-
-            imageBrushShuffleOn = InitializeImageBrush(imageBrushShuffleOn, "images//shuffle_thin_on.png");
-
+        private void Player_PlayerStatusChanged(object? sender, PlayerStatus e)
+        {
+            switch (e)
+            {
+                case PlayerStatus.UNKNOWN:
+                    break;
+                case PlayerStatus.STOPPED:
+                    break;
+                case PlayerStatus.PLAYING:
+                    // TODO: change icon
+                    break;
+                case PlayerStatus.PAUSED:
+                    // TODO: change icon
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void ButtonPlayPause_Click(object sender, RoutedEventArgs e)
         {
-            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            if (player != null)
             {
-                if (mainWindow.outputDevice.PlaybackState == PlaybackState.Playing)
-                {
-                    ButtonPlayPause.Background = imageBrushPlay;
-                    mainWindow.outputDevice.Pause();
-                }
-                else
-                {
-                    ButtonPlayPause.Background = imageBrushPause;
-                    mainWindow.outputDevice.Play();
-                }
+                player.Play();
             }
-            // Doesn't work completely TODO: Fix when switching between playlists and playing/pausing to fast
-
         }
 
         private void ButtonShuffle_Click(object sender, RoutedEventArgs e)
         {
-            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            if (player != null)
             {
-                if (mainWindow.shuffle == false)
-                {
-                    mainWindow.shuffle = true;
-                    mainWindow.currentPlaylist.Shuffle();
-                    ButtonShuffle.Background = imageBrushShuffleOn;
-                }
-                else
-                {
-                    mainWindow.shuffle = false;
-                    mainWindow.currentPlaylist.ResetShuffleSort();
-                    ButtonShuffle.Background = imageBrushShuffle;
-                }
+                player.Shuffle();
             }
         }
 
-        private void ButtonBack_Click(object sender, RoutedEventArgs e)
+        private void ButtonPrevious_Click(object sender, RoutedEventArgs e)
         {
-            var prevPlaybState = mainWindow.outputDevice.PlaybackState;
-            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            if (player != null)
             {
-                Song nextSong = mainWindow.currentPlaylist.PreviousSong();
-                mainWindow.StopOutputDevice();
-                mainWindow.PlaySong(nextSong);
-                if (prevPlaybState == PlaybackState.Paused)
-                {
-                    mainWindow.outputDevice.Pause();
-                }
+                player.Previous();
             }
         }
 
         private void ButtonSkip_Click(object sender, RoutedEventArgs e)
         {
-            var prevPlaybState = mainWindow.outputDevice.PlaybackState;
-            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            if (player != null)
             {
-                Song nextSong = mainWindow.currentPlaylist.Skip();
-                mainWindow.StopOutputDevice();
-                mainWindow.PlaySong(nextSong);
-                if (prevPlaybState == PlaybackState.Paused)
-                {
-                    mainWindow.outputDevice.Pause();
-                }
+                player.Skip();
             }
         }
 
         private void ButtonRepeat_Click(object sender, RoutedEventArgs e)
         {
-            if (mainWindow.currentPlaylist != null && mainWindow.currentPlaylist.SongList.Count >= 1 && mainWindow.outputDevice != null)
+            if (player != null)
             {
-                if (mainWindow.currentPlaylist.Repeat == false)
-                {
-                    mainWindow.currentPlaylist.Repeat = true;
-                    ButtonRepeat.Background = Brushes.Green;
-                    ButtonRepeat.Background = imageBrushRepeatOn;
-                }
-                else
-                {
-                    mainWindow.currentPlaylist.Repeat = false;
-                    ButtonRepeat.Background = null;
-                    ButtonRepeat.Background = imageBrushRepeat;
-                }
+                player.Repeat();
             }
         }
 
         public void ResetAfterPlaylistSwitch()
         {
-            ButtonPlayPause.Background = imageBrushPause;
+            //TODO  
         }
 
-        private ImageBrush InitializeImageBrush(ImageBrush imageBrush, String pathImage)
+        public void SetPlayer(Player player)
         {
-            imageBrush.Stretch = Stretch.Uniform;
-            imageBrush.TileMode = TileMode.None;
-            imageBrush.ImageSource = new BitmapImage(new Uri(pathImage, UriKind.Relative));
-            return imageBrush;
+            this.player = player;
+            player.PlayerStatusChanged += Player_PlayerStatusChanged;
         }
     }
 }

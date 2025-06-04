@@ -29,16 +29,18 @@ namespace MusikProgramm
         outputDevice.Init(audiofile);
         outputDevice.Play();*/
 
-        public AudioFileReader audiofile;
-        public WasapiOut outputDevice;
-
         public List<Playlist> playlists { get; private set; } = new List<Playlist>();
         public Playlist? currentPlaylist;
         public bool shuffle;
         private WindowPlaylist ?playlistWindow;
+
+        private Player player = new Player();
+
         public MainWindow()
         {
             InitializeComponent();
+
+            player.PlayerStatusChanged += Player_PlayerStatusChanged;
 
             //Serilog setup
             Log.Logger = new LoggerConfiguration().
@@ -80,13 +82,24 @@ namespace MusikProgramm
                 Log.Debug("No Playlists exist");
             }
 
-            UserControlPlayPauseSkip.mainWindow = this;
+            UserControlPlayPauseSkip.SetPlayer(player);
         }
 
-        private void OutputDevice_PlaybackStopped(object? sender, StoppedEventArgs e)
+        private void Player_PlayerStatusChanged(object? sender, PlayerStatus e)
         {
-            Song nextSong = currentPlaylist.NextSong(false);
-            PlaySong(nextSong);
+            switch (e)
+            {
+                case PlayerStatus.UNKNOWN:
+                    break;
+                case PlayerStatus.STOPPED:
+                    break;
+                case PlayerStatus.PLAYING:
+                    break;
+                case PlayerStatus.PAUSED:
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void ListViewPlaylists_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -115,19 +128,11 @@ namespace MusikProgramm
 
         private void ListViewPlaylists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Switch Playlist
-            if (outputDevice!= null)
-            {
-                StopOutputDevice();
-            }
-
             currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
 
             if (currentPlaylist != null && currentPlaylist.SongList.Count >= 1)
             {
-                Song song = currentPlaylist.NextSong(true); // starts playlist
-                PlaySong(song);
-                UserControlPlayPauseSkip.ResetAfterPlaylistSwitch();
+                player.SetPlaylist(currentPlaylist);
             }
         }
 
@@ -155,6 +160,7 @@ namespace MusikProgramm
             }
         }
 
+        /*
         public void PlaySong(Song nextSong)
         {
             audiofile = new AudioFileReader(nextSong.Path);
@@ -171,5 +177,19 @@ namespace MusikProgramm
             outputDevice.Dispose();
             outputDevice = null;
         }
+
+        public void Play()
+        {
+            outputDevice.Play();
+            // TODO: Player Bar anpassen
+
+            // TODO: Playlist Window anpassen
+
+        }
+
+        public void Stop()
+        {
+            // TODO Stoppen + player anpassen
+        }*/
     }
 }

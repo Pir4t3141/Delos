@@ -152,7 +152,15 @@ namespace MusikProgramm
             }
             else
             {
-                currentSong++;
+                if (currentSong == SongListSorted.Count - 1)
+                {
+                    currentSong++;
+                    
+                }
+                else
+                {
+                    currentSong= 0;
+                }
                 return SongListSorted[currentSong];
             }
         }

@@ -28,7 +28,6 @@ namespace MusikProgramm
 
             this.playlist = playlist;
             this.mainWindow = mainWindow;
-            UserControlPlayPauseSkip.mainWindow = mainWindow;
             LabelName.Content = playlist.Name;
 
             foreach (Song song in playlist.SongListSorted)
