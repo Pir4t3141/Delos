@@ -58,7 +58,7 @@ namespace MusikProgramm
                 {
                     try
                     {
-                        string[] fileSeperated = file.Split('.');   
+                        string[] fileSeperated = file.Split('.');
                         Array.Reverse(fileSeperated);
                         if (fileSeperated[0] == "txt") // only looks for playlists //TODO: Change .txt to playlist format
                         {
