@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Design;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,9 +42,9 @@ namespace MusikProgramm
 
         public List<Song> SongList { get; set; } = new List<Song>();
 
-        public int currentSong { get; set; } = 0;
+        private int currentSong { get; set; } = 0;
 
-        public List<Song> SongListSorted { get; set; } = new List<Song>(); // TODO: Make it so that it is songlist on start
+        public List<Song> SongListSorted { get; set; }
         
         public Playlist(string name)
         {
@@ -73,7 +74,7 @@ namespace MusikProgramm
                         }
                     }
                 }
-                playlist.SongListSorted = playlist.SongList;
+                playlist.SongListSorted = new List<Song>(playlist.SongList);
                 return playlist;
             }
             catch
@@ -114,7 +115,15 @@ namespace MusikProgramm
 
         public Song Skip()
         {
-            currentSong += 1;
+            if (currentSong != SongListSorted.Count-1)
+            {
+                currentSong++;
+            }
+            else
+            {
+                currentSong = 0;
+            }
+
             return SongListSorted[currentSong];
         }
 
@@ -150,7 +159,15 @@ namespace MusikProgramm
 
         public Song PreviousSong()
         {
-            currentSong--;
+            if (currentSong != 0)
+            {
+                currentSong--;   
+            }
+            else
+            {
+                currentSong = SongListSorted.Count - 1;
+            }
+
             return SongListSorted[currentSong];
         }
 
@@ -166,27 +183,24 @@ namespace MusikProgramm
 
         public void Shuffle()
         {
-            Log.Debug($"Before shuffle: {SongListSorted}");
-            List<Song> list = SongListSorted;
+            Log.Debug($"Before shuffle: {String.Join(',', SongListSorted)}");
+            List<Song> list = new List<Song>(SongListSorted);
             SongListSorted.Clear();
 
             Random random = new Random();
-            // Fisher-Yates shuffle
-            int n = list.Count;
-            int k;
-            while (n > 1)
+            while (list.Count > 0)
             {
-                n--;
-                k = random.Next(n + 1);
+                int k = random.Next(list.Count);
                 SongListSorted.Add(list[k]);
+                list.RemoveAt(k);
             }
-            Log.Debug($"After shuffle: {SongListSorted}");
+            Log.Debug($"After shuffle: {String.Join(',', SongListSorted)}");
         }
 
         public void ResetShuffleSort()
         {
             Log.Debug("Reset shuffle");
-            SongListSorted = SongList;
+            SongListSorted = new List<Song>(SongList);
         }
 
         public override string ToString()

@@ -35,7 +35,7 @@ namespace MusikProgramm
         public List<Playlist> playlists { get; private set; } = new List<Playlist>();
         public Playlist? currentPlaylist;
         public bool shuffle;
-        private WindowPlaylist? playlistWindow;
+        private WindowPlaylist ?playlistWindow;
         public MainWindow()
         {
             InitializeComponent();
@@ -83,93 +83,6 @@ namespace MusikProgramm
             UserControlPlayPauseSkip.mainWindow = this;
         }
 
-        private void OutputDevice_PlaybackStopped(object? sender, StoppedEventArgs e)
-        {
-            Song nextSong = currentPlaylist.NextSong(false);
-            PlaySong(nextSong);
-        }
-
-        private void ListViewPlaylists_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            // view playlist
-
-            //currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
-
-            if (currentPlaylist != null && playlistWindow == null)
-            {
-                playlistWindow = new WindowPlaylist(currentPlaylist, this);
-                playlistWindow.mainWindow = this;
-                playlistWindow.Show();
-                playlistWindow.Closed += PlaylistWindow_Closed;
-            }
-            else
-            {
-                Log.Debug("No playlist detected");
-            }
-        }
-
-        private void PlaylistWindow_Closed(object? sender, EventArgs e)
-        {
-            playlistWindow = null;
-        }
-
-        private void ListViewPlaylists_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // Switch Playlist
-            if (outputDevice != null)
-            {
-                StopOutputDevice();
-            }
-
-            currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
-
-            if (currentPlaylist != null && currentPlaylist.SongList.Count >= 1)
-            {
-                Song song = currentPlaylist.NextSong(true); // starts playlist
-                PlaySong(song);
-                UserControlPlayPauseSkip.ResetAfterPlaylistSwitch();
-            }
-        }
-
-        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
-        {
-            WindowAddEditPlaylist windowAddPlaylist = new WindowAddEditPlaylist(this);
-
-            if (windowAddPlaylist.ShowDialog() == true)
-            {
-                String? Name = windowAddPlaylist.Name;
-                if (Name != null)
-                {
-                    playlists.Add(new Playlist(Name));
-                }
-            }
-            UpdateListView();
-        }
-
-        private void UpdateListView()
-        {
-            ListViewPlaylists.Items.Clear();
-            foreach (Playlist playlist in playlists)
-            {
-                ListViewPlaylists.Items.Add(playlist);
-            }
-        }
-
-        public void PlaySong(Song nextSong)
-        {
-            audiofile = new AudioFileReader(nextSong.Path);
-            outputDevice = new WasapiOut();
-            outputDevice.Init(audiofile);
-            outputDevice.Play();
-            outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
-        }
-
-        public void StopOutputDevice()
-        {
-            outputDevice.PlaybackStopped -= OutputDevice_PlaybackStopped; // sonst wird das event beim stoppen ausgelöst
-            outputDevice.Stop();
-            outputDevice.Dispose();
-            outputDevice = null;
         }
     }
 }

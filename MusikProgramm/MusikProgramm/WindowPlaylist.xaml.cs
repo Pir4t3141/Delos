@@ -19,9 +19,22 @@ namespace MusikProgramm
     /// </summary>
     public partial class WindowPlaylist : Window
     {
-        public WindowPlaylist()
+        private Playlist playlist;
+        public MainWindow mainWindow;
+
+        public WindowPlaylist(Playlist playlist, MainWindow mainWindow)
         {
             InitializeComponent();
+
+            this.playlist = playlist;
+            this.mainWindow = mainWindow;
+            UserControlPlayPauseSkip.mainWindow = mainWindow;
+            LabelName.Content = playlist.Name;
+
+            foreach (Song song in playlist.SongListSorted)
+            {
+                ListViewPlaylists.Items.Add(song);
+            }
         }
     }
 }
