@@ -41,7 +41,9 @@ Auch können Songs bzw Audios in das Programm hochgeladen werden
 | 21.05 | Verbessern des Designs | Chiara | 0% |
 | 28.05 | User Control für Play Pause usw. | Chiara | 0% |
 | 27.05 + 28.05 | Klassen so gut wie fertig coden | Tobias | 0% |
-| Inhalt 9 | Inhalt 10| Inhalt 11| Inhalt 12|
+| 04.06 | (erfolglose) Fehlerbehebung | Chiara, Tobi, Herr Bechtold | 0% |
+| 06.06 | (erfolgreiche) Fehlerbehebung | Chiara, Tobi, Herr Diem | 0% |
+
 
 
 ## Klassen
