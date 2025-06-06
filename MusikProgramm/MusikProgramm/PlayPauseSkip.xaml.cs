@@ -100,5 +100,13 @@ namespace MusikProgramm
             this.player = player;
             player.PlayerStatusChanged += Player_PlayerStatusChanged;
         }
+
+        private void SliderVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (LabelVolume != null)
+            {
+                LabelVolume.Content = $"Volume: {(int)SliderVolume.Value}";
+            }
+        }
     }
 }
