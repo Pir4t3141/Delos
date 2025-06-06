@@ -18,7 +18,7 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="1" x:Name="ButtonShuffle" Click="ButtonShuffle_Click" Margin="2px" Background="White">
-            <Image Source="/images/shuffle_thin.png"/>
+            <Image x:Name="ImageShuffle" Source="/images/shuffle_thin.png"/>
         </Button>
 
         <Button Grid.Column="2" x:Name="ButtonPrevious" Click="ButtonPrevious_Click" Margin="2px" Background="White">
@@ -26,7 +26,7 @@
         </Button>
 
         <Button Grid.Column="3" x:Name="ButtonPlayPause" Click="ButtonPlayPause_Click" Margin="2px" Background="White">
-            <Image Source="/images/play.png"/>
+            <Image x:Name="ImagePlayPause" Source="/images/play.png"/>
         </Button>
 
         <Button Grid.Column="4" x:Name="ButtonSkip" Click="ButtonSkip_Click" Margin="2px" Background="White">

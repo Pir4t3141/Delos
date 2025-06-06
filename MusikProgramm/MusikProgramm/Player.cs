@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace MusikProgramm
 {
@@ -15,7 +16,7 @@ namespace MusikProgramm
         PAUSED = 3
     }
 
-    public enum PlayerPlaylistStuatus
+    public enum PlayerPlaylistStatus
     {
         UNKNOWN = 0,
         SHUFFLE = 1,
@@ -27,22 +28,28 @@ namespace MusikProgramm
     public class Player
     {
         public PlayerStatus Status { get; set; } = PlayerStatus.STOPPED;
+        public PlayerPlaylistStatus StatusPlaylist { get; set; } = PlayerPlaylistStatus.NONE;
 
-        public AudioFileReader audiofile;
-        public WasapiOut outputDevice;
+        public AudioFileReader? audiofile;
+        public WasapiOut? outputDevice;
 
         private Playlist currentPlaylist;
 
         public event EventHandler<PlayerStatus> PlayerStatusChanged;
 
+        public event EventHandler<PlayerPlaylistStatus> PlayerPlaylistStatusChanged;
+
         private bool shuffle = false;
 
         private bool repeat = false;
+
+        private int previousVolume = 100;
 
         public void Play()
         {
             if (outputDevice != null)
             {
+                audiofile.Volume = 1.0f;
                 Status = PlayerStatus.PLAYING;
                 outputDevice.Play();
                 NotifyStatusChanged();
@@ -63,17 +70,18 @@ namespace MusikProgramm
         {
             if (outputDevice != null)
             {
-                Status = PlayerStatus.PAUSED;
+                audiofile.Volume = 0.0f; // kein nachklang mehr
                 outputDevice.Pause();
+                Status = PlayerStatus.PAUSED;
                 NotifyStatusChanged();
             }
         }
 
         public void Skip() //Skip
         {
-            outputDevice.Dispose();
             if (outputDevice != null)
             {
+                outputDevice.Dispose();
                 audiofile = new AudioFileReader(currentPlaylist.NextSong(false).Path);
                 outputDevice = new WasapiOut();
                 outputDevice.Init(audiofile);
@@ -83,6 +91,7 @@ namespace MusikProgramm
 
         private void OutputDevice_PlaybackStopped(object? sender, StoppedEventArgs e)
         {
+            Log.Debug("Playing Next song in playlist");
             audiofile = new AudioFileReader(currentPlaylist.NextSong(false).Path);
             outputDevice = new WasapiOut();
             outputDevice.Init(audiofile);
@@ -92,9 +101,9 @@ namespace MusikProgramm
 
         public void Previous() 
         {
-            outputDevice.Dispose();
             if (outputDevice != null)
             {
+                outputDevice.Dispose();
                 audiofile = new AudioFileReader(currentPlaylist.PreviousSong().Path);
                 outputDevice = new WasapiOut();
                 outputDevice.Init(audiofile);
@@ -107,6 +116,11 @@ namespace MusikProgramm
             PlayerStatusChanged?.Invoke(this, Status);
         }
 
+        public void NotifyStatusPlaylistChange()
+        {
+            PlayerPlaylistStatusChanged?.Invoke(this, StatusPlaylist);
+        }
+
         public void SetPlaylist(Playlist playlist)
         {
             if (outputDevice != null)
@@ -114,6 +128,7 @@ namespace MusikProgramm
                 outputDevice.Dispose();
             }
 
+            Status = PlayerStatus.PLAYING;
             currentPlaylist = playlist;
 
             audiofile = new AudioFileReader(playlist.NextSong(true).Path);
@@ -130,12 +145,30 @@ namespace MusikProgramm
             {
                 currentPlaylist.Shuffle();
                 shuffle = true;
+
+                if (repeat)
+                {
+                    StatusPlaylist = PlayerPlaylistStatus.SHUFFLEREPEAT;
+                }
+                else
+                {
+                    StatusPlaylist = PlayerPlaylistStatus.SHUFFLE;
+                }
             }
             else
             {
+                if (repeat)
+                {
+                    StatusPlaylist = PlayerPlaylistStatus.REPEAT;
+                }
+                else
+                {
+                    StatusPlaylist = PlayerPlaylistStatus.NONE;
+                }
                 currentPlaylist.ResetShuffleSort();
                 shuffle = false;
             }
+            NotifyStatusPlaylistChange();
         }
 
         public void Repeat()
@@ -144,12 +177,30 @@ namespace MusikProgramm
             {
                 currentPlaylist.Repeat = true;
                 repeat = true;
+                if (shuffle)
+                {
+                    StatusPlaylist = PlayerPlaylistStatus.SHUFFLEREPEAT;
+                }
+                else
+                {
+                    StatusPlaylist = PlayerPlaylistStatus.REPEAT;
+                }
             }
             else
             {
                 currentPlaylist.Repeat = false;
                 repeat = false;
+
+                if (shuffle)
+                {
+                    StatusPlaylist = PlayerPlaylistStatus.SHUFFLE;
+                }
+                else
+                {
+                    StatusPlaylist = PlayerPlaylistStatus.NONE;
+                }
             }
+            NotifyStatusPlaylistChange();
         }
     }
 }

@@ -49,6 +49,7 @@ namespace MusikProgramm
         public Playlist(string name)
         {
             Name = name;
+            SongListSorted = new List<Song>(SongList);
         }
 
         public static Playlist Import(string path)
@@ -154,12 +155,11 @@ namespace MusikProgramm
             {
                 if (currentSong == SongListSorted.Count - 1)
                 {
-                    currentSong++;
-                    
+                    currentSong = 0;
                 }
                 else
                 {
-                    currentSong= 0;
+                    currentSong++;
                 }
                 return SongListSorted[currentSong];
             }
@@ -177,11 +177,6 @@ namespace MusikProgramm
             }
 
             return SongListSorted[currentSong];
-        }
-
-        public void Serialize()
-        {
-            // TODO: find out what to do here
         }
 
         public void Stop(int progress)

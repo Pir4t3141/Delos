@@ -83,6 +83,7 @@ namespace MusikProgramm
             }
 
             UserControlPlayPauseSkip.SetPlayer(player);
+            
         }
 
         private void Player_PlayerStatusChanged(object? sender, PlayerStatus e)
