@@ -49,6 +49,7 @@ namespace MusikProgramm
         public Playlist(string name)
         {
             Name = name;
+            SongListSorted = new List<Song>(SongList);
         }
 
         public static Playlist Import(string path)
@@ -56,7 +57,7 @@ namespace MusikProgramm
             string[] pathSplit = path.Split('.');
             string[] pathSplitName = pathSplit[0].Split("\\");
             Log.Debug($"Name of Playlist when importing: {pathSplitName[1]}");
-            Playlist playlist = new Playlist(pathSplitName[1]);
+            Playlist playlist = new Playlist(pathSplitName[1].Replace(']', ' '));
             Log.Debug(pathSplit[0]);
 
             try
@@ -154,12 +155,11 @@ namespace MusikProgramm
             {
                 if (currentSong == SongListSorted.Count - 1)
                 {
-                    currentSong++;
-                    
+                    currentSong = 0;
                 }
                 else
                 {
-                    currentSong= 0;
+                    currentSong++;
                 }
                 return SongListSorted[currentSong];
             }
@@ -179,12 +179,7 @@ namespace MusikProgramm
             return SongListSorted[currentSong];
         }
 
-        public void Serialize()
-        {
-            // TODO: find out what to do here
-        }
-
-        public void Stop(int progress)
+        public void SaveProgress(int progress)
         {
             SongListSorted[currentSong].Progress = progress;
         }
@@ -208,7 +203,18 @@ namespace MusikProgramm
         public void ResetShuffleSort()
         {
             Log.Debug("Reset shuffle");
+
+            Song songPrevPlayed = SongListSorted[currentSong];
+
             SongListSorted = new List<Song>(SongList);
+
+            foreach (Song song in SongListSorted)
+            {
+                if (songPrevPlayed == song)
+                {
+                    currentSong = SongListSorted.IndexOf(song);
+                }
+            }
         }
 
         public override string ToString()

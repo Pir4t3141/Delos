@@ -40,9 +40,11 @@ namespace MusikProgramm
                 case PlayerStatus.STOPPED:
                     break;
                 case PlayerStatus.PLAYING:
+                    ImagePlayPause.Source = new BitmapImage(new Uri("images/pause.png", UriKind.Relative));
                     // TODO: change icon
                     break;
                 case PlayerStatus.PAUSED:
+                    ImagePlayPause.Source = new BitmapImage(new Uri("images/play.png", UriKind.Relative));
                     // TODO: change icon
                     break;
                 default:
@@ -54,7 +56,14 @@ namespace MusikProgramm
         {
             if (player != null)
             {
-                player.Play();
+                if (player.Status == PlayerStatus.PLAYING)
+                {
+                    player.Pause();
+                }
+                else
+                {
+                    player.Play();
+                }
             }
         }
 
@@ -99,6 +108,74 @@ namespace MusikProgramm
         {
             this.player = player;
             player.PlayerStatusChanged += Player_PlayerStatusChanged;
+            player.PlayerPlaylistStatusChanged += Player_PlayerPlaylistStatusChanged;
+
+            switch (player.Status)
+            {
+                case PlayerStatus.UNKNOWN:
+                    break;
+                case PlayerStatus.STOPPED:
+                    break;
+                case PlayerStatus.PLAYING:
+                    ImagePlayPause.Source = new BitmapImage(new Uri("images/pause.png", UriKind.Relative));
+                    break;
+                case PlayerStatus.PAUSED:
+                    ImagePlayPause.Source = new BitmapImage(new Uri("images/play.png", UriKind.Relative));
+                    break;
+                default:
+                    break;
+            }
+
+            switch (player.StatusPlaylist)
+            {
+                case PlayerPlaylistStatus.UNKNOWN:
+                    break;
+                case PlayerPlaylistStatus.SHUFFLE:
+                    ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin_on.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin.png", UriKind.Relative));
+                    break;
+                case PlayerPlaylistStatus.REPEAT:
+                    ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin_on.png", UriKind.Relative));
+                    break;
+                case PlayerPlaylistStatus.SHUFFLEREPEAT:
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin_on.png", UriKind.Relative));
+                    ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin_on.png", UriKind.Relative));
+                    break;
+                case PlayerPlaylistStatus.NONE:
+                    ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin.png", UriKind.Relative));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void Player_PlayerPlaylistStatusChanged(object? sender, PlayerPlaylistStatus e)
+        {
+            switch (e)
+            {
+                case PlayerPlaylistStatus.UNKNOWN:
+                    break;
+                case PlayerPlaylistStatus.SHUFFLE:
+                    ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin_on.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin.png", UriKind.Relative));
+                    break;
+                case PlayerPlaylistStatus.REPEAT:
+                    ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin_on.png", UriKind.Relative));
+                    break;
+                case PlayerPlaylistStatus.SHUFFLEREPEAT:
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin_on.png", UriKind.Relative));
+                    ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin_on.png", UriKind.Relative));
+                    break;
+                case PlayerPlaylistStatus.NONE:
+                    ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin.png", UriKind.Relative));
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void SliderVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

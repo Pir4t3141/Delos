@@ -16,13 +16,13 @@
             <RowDefinition Height="1.5*"/>
             <!-- Name / Home -->
             <RowDefinition Height="2*"/>
-            <!-- 1 Spalte für Playlists -->
+            <!-- 1 Spalte f체r Playlists -->
             <RowDefinition Height="2*"/>
-            <!-- 2 Spalte für Playlists -->
+            <!-- 2 Spalte f체r Playlists -->
             <RowDefinition Height="*"/>
-            <!-- Hier kommen Buttons und so ähnlich hin wie zb Add -->
+            <!-- Hier kommen Buttons und so 채hnlich hin wie zb Add -->
             <RowDefinition Height="*"/>
-            <!-- Hier kommst später die Musikwiedergabe hin -->
+            <!-- Hier kommst sp채ter die Musikwiedergabe hin -->
 
 
         </Grid.RowDefinitions>
@@ -39,7 +39,8 @@
                 <ComboBoxItem Content="Date"/>
                 <ComboBoxItem Content="Artist"/>
                 <ComboBoxItem Content="Name"/>
-                <ComboBoxItem Content="Default" IsSelected="True"/> <!--No sort (users own order)-->
+                <ComboBoxItem Content="Default" IsSelected="True"/>
+                <!--No sort (users own order)-->
             </ComboBox>
         </DockPanel>
 
