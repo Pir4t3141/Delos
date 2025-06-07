@@ -28,7 +28,7 @@ namespace MusikProgramm
             private set {}
         }
 
-        public uint ReleaseYear { get; set; } // Year of releasea
+        public uint ReleaseYear { get; set; } // Year of releases
         public string[] Artists { get; set; } // Name of artists
         public string Path { get; set; } // Path of file
 
@@ -65,7 +65,7 @@ namespace MusikProgramm
 
         public override string ToString()
         {
-            return $"{Name} released on {ReleaseYear} by {string.Join(",", Artists)}";
+            return $"{Name} released in {ReleaseYear} by {string.Join(",", Artists)}";
         }
         
         public string SerializeToString()
@@ -86,7 +86,14 @@ namespace MusikProgramm
             {
                 foreach (string artist in Artists)
                 {
-                    serialized += $"{artist}[";
+                    if (Array.IndexOf(Artists, artist) == Artists.Length - 1)
+                    {
+                        serialized += $"{artist}"; // if last element
+                    }
+                    else
+                    {
+                        serialized += $"{artist}[";
+                    }
                 }
             }
             else
