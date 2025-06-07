@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Serilog;
 using System.Runtime.InteropServices.Marshalling;
 using System.IO;
+using System.Reflection.PortableExecutable;
+using System.Reflection.Metadata;
 
 namespace MusikProgramm
 {
@@ -65,15 +67,20 @@ namespace MusikProgramm
         {
             if (outputDevice != null)
             {
-                //save progress
-                currentPlaylist.SaveProgress(Convert.ToInt32(audiofile.CurrentTime.TotalSeconds));
-                currentPlaylist.Save();
-
                 manualStop = true;
                 Status = PlayerStatus.STOPPED;
                 outputDevice.Dispose();
                 NotifyStatusChanged();
             }   
+        }
+
+        public void SaveProgress()
+        {
+            if (outputDevice != null)
+            {
+                currentPlaylist.SaveProgress(Convert.ToInt32(audiofile.CurrentTime.TotalSeconds));
+                currentPlaylist.Save();
+            }
         }
         
         public void Pause() 
@@ -134,12 +141,23 @@ namespace MusikProgramm
 
         public void SetPlaylist(Playlist playlist)
         {
+            SaveProgress();
             Stop();
 
-            Status = PlayerStatus.PLAYING;
             currentPlaylist = playlist;
 
-            SetupNextSong(playlist.NextSong(true).Path);
+            Song nextSong = playlist.NextSong(true);
+            manualStop = false;
+            SetupNextSong(nextSong.Path);
+
+            if (nextSong.Progress != null)
+            {
+                audiofile.CurrentTime = TimeSpan.FromSeconds(Convert.ToDouble(nextSong.Progress));
+                nextSong.Progress = null;
+            }
+
+            Status = PlayerStatus.PLAYING;
+            NotifyStatusChanged();
         }
 
         public void Shuffle()
@@ -212,6 +230,7 @@ namespace MusikProgramm
             outputDevice = new WasapiOut();
             outputDevice.Init(audiofile);
             outputDevice.Play();
+
             outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
         }
     }

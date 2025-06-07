@@ -141,7 +141,6 @@ namespace MusikProgramm
                 {
                     if (song.Progress != null)
                     {
-                        song.Progress = null;
                         currentSong = SongListSorted.IndexOf(song);
                         return song;
                     }
