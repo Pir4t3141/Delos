@@ -36,7 +36,13 @@
         <Button Grid.Column="5" x:Name="ButtonRepeat" Click="ButtonRepeat_Click" Margin="2px" Background="White">
             <Image x:Name="ImageRepeat" Source="/images/repeat_thin.png"/>
         </Button>
-       
-        
+
+        <Slider x:Name="SliderVolume" Minimum="0" Maximum="100" Grid.Column="6" VerticalAlignment="Center"
+        ValueChanged="SliderVolume_ValueChanged"/>
+        <Label x:Name="LabelVolume" Content="Volume: 0" Grid.Column="6" VerticalAlignment="Bottom"
+       HorizontalContentAlignment="Center" FontFamily="Bauhaus 93"/>
+
+
+
     </Grid>
 </UserControl>

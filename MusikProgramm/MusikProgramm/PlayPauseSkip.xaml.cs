@@ -177,5 +177,13 @@ namespace MusikProgramm
                     break;
             }
         }
+
+        private void SliderVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (LabelVolume != null)
+            {
+                LabelVolume.Content = $"Volume: {(int)SliderVolume.Value}";
+            }
+        }
     }
 }

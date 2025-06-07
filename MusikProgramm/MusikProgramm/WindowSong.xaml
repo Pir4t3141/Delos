@@ -5,32 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusikProgramm"
         mc:Ignorable="d"
-        Title="WindowPlaylist" Height="450" Width="800">
+        Title="WindowSong" Height="220" Width="350">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-
         <Grid.RowDefinitions>
-            <RowDefinition Height="1.5*"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="2*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Rectangle Grid.Row="4" Grid.ColumnSpan="2" Fill="DarkSlateBlue"/>
-        <!-- Hier kommt später die Musikwiedergabe hin -->
-        <Rectangle Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Fill="SlateBlue"/>
-        <!-- Hier kommen die Songs hin -->
+        <Label Content="Name:" Height="30px"/>
+        <Label Content="Artist:" Height="30px" Grid.Row="1"/>
+        <Label Content="Album:" Height="30px" Grid.Row="2"/>
+        <Label Content="Release Year:" Height="30px" Grid.Row="3"/>
+        <Label Content="Path:" Height="30px" Grid.Row="4"/>
+        <Label Content="Album:" Height="30px" Grid.Row="5"/>
+        <TextBox x:Name="TextBoxName" Grid.Column="1" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxName_TextChanged"/>
+        <TextBox x:Name="TextBoxArtist" Grid.Column="1" Grid.Row="1" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxArtist_TextChanged"/>
+        <TextBox x:Name="TextBoxAlbum" Grid.Column="1" Grid.Row="2" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxAlbum_TextChanged"/>
+        <TextBox x:Name="TextBoxReleaseYear" Grid.Column="1" Grid.Row="3" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxReleaseYear_TextChanged"/>
+        <TextBox x:Name="TextBoxPath" Grid.Column="1" Grid.Row="4" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxPath_TextChanged"/>
 
-        <Label Grid.ColumnSpan="2" Content="Song - Name" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Bauhaus 93"/>
-
-        <DockPanel Grid.Column="0" Grid.Row="3">
-            <Button Content="Edit Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left"/>
-            <Button Content="Delete Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left"/>
-        </DockPanel>
+        <StackPanel Grid.Column="1" Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="ButtonCancel" Content="Cancel" Height="30px" Width="100px" Margin="0 0 20 0" Click="ButtonCancel_Click"/>
+            <Button x:Name="ButtonAdd" Content="Add" Height="30px" Width="100px" Margin="0 0 10 0" Click="ButtonAdd_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
