@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Serilog;
+using System.Runtime.InteropServices.Marshalling;
+using System.IO;
 
 namespace MusikProgramm
 {
@@ -45,6 +47,9 @@ namespace MusikProgramm
 
         private int previousVolume = 100;
 
+        private bool manualStop = false; // used to see if stop of outputdevice was stopped because song is finished or Stop() was used (continue playing next song or don't) 
+
+
         public void Play()
         {
             if (outputDevice != null)
@@ -60,6 +65,11 @@ namespace MusikProgramm
         {
             if (outputDevice != null)
             {
+                //save progress
+                currentPlaylist.SaveProgress(Convert.ToInt32(audiofile.CurrentTime.TotalSeconds));
+                currentPlaylist.Save();
+
+                manualStop = true;
                 Status = PlayerStatus.STOPPED;
                 outputDevice.Dispose();
                 NotifyStatusChanged();
@@ -81,33 +91,34 @@ namespace MusikProgramm
         {
             if (outputDevice != null)
             {
-                outputDevice.Dispose();
-                audiofile = new AudioFileReader(currentPlaylist.NextSong(false).Path);
-                outputDevice = new WasapiOut();
-                outputDevice.Init(audiofile);
-                outputDevice.Play();
+                Stop();
+
+                SetupNextSong(currentPlaylist.NextSong(false).Path);
             }
         }
 
         private void OutputDevice_PlaybackStopped(object? sender, StoppedEventArgs e)
         {
-            Log.Debug("Playing Next song in playlist");
-            audiofile = new AudioFileReader(currentPlaylist.NextSong(false).Path);
-            outputDevice = new WasapiOut();
-            outputDevice.Init(audiofile);
-            outputDevice.Play();
-            
+            if (!manualStop)
+            {
+                Log.Debug("Playing Next song in playlist");
+
+                SetupNextSong(currentPlaylist.NextSong(false).Path);
+            }
+            else
+            {
+                Log.Debug("Manual stop received, not playing next song");
+            }
+            manualStop = false;
         }
 
         public void Previous() 
         {
             if (outputDevice != null)
             {
-                outputDevice.Dispose();
-                audiofile = new AudioFileReader(currentPlaylist.PreviousSong().Path);
-                outputDevice = new WasapiOut();
-                outputDevice.Init(audiofile);
-                outputDevice.Play();
+                Stop();
+
+                SetupNextSong(currentPlaylist.PreviousSong().Path);
             }
         }
 
@@ -123,25 +134,17 @@ namespace MusikProgramm
 
         public void SetPlaylist(Playlist playlist)
         {
-            if (outputDevice != null)
-            {
-                outputDevice.Dispose();
-            }
+            Stop();
 
             Status = PlayerStatus.PLAYING;
             currentPlaylist = playlist;
 
-            audiofile = new AudioFileReader(playlist.NextSong(true).Path);
-            outputDevice = new WasapiOut();
-            outputDevice.Init(audiofile);
-            outputDevice.Play();
-
-            outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
+            SetupNextSong(playlist.NextSong(true).Path);
         }
 
         public void Shuffle()
         {
-            if (!shuffle)
+            if (!shuffle & currentPlaylist != null)
             {
                 currentPlaylist.Shuffle();
                 shuffle = true;
@@ -155,7 +158,7 @@ namespace MusikProgramm
                     StatusPlaylist = PlayerPlaylistStatus.SHUFFLE;
                 }
             }
-            else
+            else if (shuffle & currentPlaylist != null)
             {
                 if (repeat)
                 {
@@ -165,15 +168,15 @@ namespace MusikProgramm
                 {
                     StatusPlaylist = PlayerPlaylistStatus.NONE;
                 }
-                currentPlaylist.ResetShuffleSort();
                 shuffle = false;
+                currentPlaylist.ResetShuffleSort();
             }
             NotifyStatusPlaylistChange();
         }
 
         public void Repeat()
         {
-            if (!repeat)
+            if (!repeat & currentPlaylist != null)
             {
                 currentPlaylist.Repeat = true;
                 repeat = true;
@@ -186,7 +189,7 @@ namespace MusikProgramm
                     StatusPlaylist = PlayerPlaylistStatus.REPEAT;
                 }
             }
-            else
+            else if (repeat & currentPlaylist != null)
             {
                 currentPlaylist.Repeat = false;
                 repeat = false;
@@ -201,6 +204,15 @@ namespace MusikProgramm
                 }
             }
             NotifyStatusPlaylistChange();
+        }
+
+        private void SetupNextSong(String path)
+        {
+            audiofile = new AudioFileReader(path);
+            outputDevice = new WasapiOut();
+            outputDevice.Init(audiofile);
+            outputDevice.Play();
+            outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
         }
     }
 }

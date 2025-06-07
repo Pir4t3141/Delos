@@ -33,6 +33,7 @@ namespace MusikProgramm
         public Playlist? currentPlaylist;
         public bool shuffle;
         private WindowPlaylist ?playlistWindow;
+        private Playlist lastEditedPlaylist;
 
         private Player player = new Player();
 
@@ -82,7 +83,27 @@ namespace MusikProgramm
                 Log.Debug("No Playlists exist");
             }
 
+            // See if there is a favourite song playlist
+            bool favoritesFound = false;
+
+            foreach (Playlist playlistInList in playlists)
+            {
+                if (playlistInList.Name == "Favorite Songs")
+                {
+                    favoritesFound = true;
+                }
+            }
+            
+            if (favoritesFound == false)
+            {
+                Playlist favoriteSongs = new Playlist("Favorite Songs");
+                favoriteSongs.Save();
+            }
+
+            UpdateListView();
+
             UserControlPlayPauseSkip.SetPlayer(player);
+            
             
         }
 
@@ -111,8 +132,9 @@ namespace MusikProgramm
 
             if (currentPlaylist != null && playlistWindow == null)
             {
-                playlistWindow = new WindowPlaylist(currentPlaylist, this);
-                playlistWindow.mainWindow = this;
+                lastEditedPlaylist = playlists[ListViewPlaylists.SelectedIndex];
+
+                playlistWindow = new WindowPlaylist(currentPlaylist, player);
                 playlistWindow.Show();
                 playlistWindow.Closed += PlaylistWindow_Closed;
             }
@@ -124,16 +146,22 @@ namespace MusikProgramm
 
         private void PlaylistWindow_Closed(object? sender, EventArgs e)
         {
+            lastEditedPlaylist = playlistWindow.playlist;
+            lastEditedPlaylist.Save();
             playlistWindow = null;
         }
 
         private void ListViewPlaylists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
-
-            if (currentPlaylist != null && currentPlaylist.SongList.Count >= 1)
+            if (ListViewPlaylists.SelectedIndex >= 0 && ListViewPlaylists.SelectedIndex < playlists.Count) // if no item is selected it breaks otherwise
             {
-                player.SetPlaylist(currentPlaylist);
+                player.Stop();
+                currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
+
+                if (currentPlaylist != null && currentPlaylist.SongList.Count >= 1)
+                {
+                    player.SetPlaylist(currentPlaylist);
+                }
             }
         }
 
@@ -161,7 +189,8 @@ namespace MusikProgramm
             }
         }
 
-        /*
+        /* für alten weg zum musik abspielen
+         * 
         public void PlaySong(Song nextSong)
         {
             audiofile = new AudioFileReader(nextSong.Path);

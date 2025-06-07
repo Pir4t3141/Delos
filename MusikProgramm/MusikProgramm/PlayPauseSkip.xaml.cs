@@ -119,19 +119,19 @@ namespace MusikProgramm
                     break;
                 case PlayerPlaylistStatus.SHUFFLE:
                     ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin_on.png", UriKind.Relative));
-                    ImageShuffle.Source = new BitmapImage(new Uri("images/repeat_thin.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin.png", UriKind.Relative));
                     break;
                 case PlayerPlaylistStatus.REPEAT:
                     ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin.png", UriKind.Relative));
-                    ImageShuffle.Source = new BitmapImage(new Uri("images/repeat_thin_on.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin_on.png", UriKind.Relative));
                     break;
                 case PlayerPlaylistStatus.SHUFFLEREPEAT:
-                    ImageShuffle.Source = new BitmapImage(new Uri("images/repeat_thin_on.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin_on.png", UriKind.Relative));
                     ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin_on.png", UriKind.Relative));
                     break;
                 case PlayerPlaylistStatus.NONE:
                     ImageShuffle.Source = new BitmapImage(new Uri("images/shuffle_thin.png", UriKind.Relative));
-                    ImageShuffle.Source = new BitmapImage(new Uri("images/repeat_thin.png", UriKind.Relative));
+                    ImageRepeat.Source = new BitmapImage(new Uri("images/repeat_thin.png", UriKind.Relative));
                     break;
                 default:
                     break;

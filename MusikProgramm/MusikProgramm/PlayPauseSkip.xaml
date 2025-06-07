@@ -34,7 +34,7 @@
         </Button>
 
         <Button Grid.Column="5" x:Name="ButtonRepeat" Click="ButtonRepeat_Click" Margin="2px" Background="White">
-            <Image Source="/images/repeat_thin.png"/>
+            <Image x:Name="ImageRepeat" Source="/images/repeat_thin.png"/>
         </Button>
        
         

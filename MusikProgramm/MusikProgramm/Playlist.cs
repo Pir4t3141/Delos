@@ -57,7 +57,7 @@ namespace MusikProgramm
             string[] pathSplit = path.Split('.');
             string[] pathSplitName = pathSplit[0].Split("\\");
             Log.Debug($"Name of Playlist when importing: {pathSplitName[1]}");
-            Playlist playlist = new Playlist(pathSplitName[1]);
+            Playlist playlist = new Playlist(pathSplitName[1].Replace(']', ' '));
             Log.Debug(pathSplit[0]);
 
             try
@@ -141,6 +141,7 @@ namespace MusikProgramm
                 {
                     if (song.Progress != null)
                     {
+                        song.Progress = null;
                         currentSong = SongListSorted.IndexOf(song);
                         return song;
                     }
@@ -179,7 +180,7 @@ namespace MusikProgramm
             return SongListSorted[currentSong];
         }
 
-        public void Stop(int progress)
+        public void SaveProgress(int progress)
         {
             SongListSorted[currentSong].Progress = progress;
         }
@@ -203,7 +204,18 @@ namespace MusikProgramm
         public void ResetShuffleSort()
         {
             Log.Debug("Reset shuffle");
+
+            Song songPrevPlayed = SongListSorted[currentSong];
+
             SongListSorted = new List<Song>(SongList);
+
+            foreach (Song song in SongListSorted)
+            {
+                if (songPrevPlayed == song)
+                {
+                    currentSong = SongListSorted.IndexOf(song);
+                }
+            }
         }
 
         public override string ToString()
