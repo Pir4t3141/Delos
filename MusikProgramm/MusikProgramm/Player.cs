@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.Marshalling;
 using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Reflection.Metadata;
+using NAudio.CoreAudioApi;
 
 namespace MusikProgramm
 {
@@ -37,7 +38,7 @@ namespace MusikProgramm
         public AudioFileReader? audiofile;
         public WasapiOut? outputDevice;
 
-        private Playlist currentPlaylist;
+        public Playlist currentPlaylist { private set; get; }
 
         public event EventHandler<PlayerStatus> PlayerStatusChanged;
 
@@ -47,7 +48,7 @@ namespace MusikProgramm
 
         private bool repeat = false;
 
-        private int previousVolume = 100;
+        private float previousVolume = 1.0f;
 
         private bool manualStop = false; // used to see if stop of outputdevice was stopped because song is finished or Stop() was used (continue playing next song or don't) 
 
@@ -56,8 +57,9 @@ namespace MusikProgramm
         {
             if (outputDevice != null)
             {
-                audiofile.Volume = 1.0f;
+                audiofile.Volume = previousVolume;
                 Status = PlayerStatus.PLAYING;
+
                 outputDevice.Play();
                 NotifyStatusChanged();
             }
@@ -67,9 +69,15 @@ namespace MusikProgramm
         {
             if (outputDevice != null)
             {
+                previousVolume = audiofile.Volume;
+
                 manualStop = true;
+
                 Status = PlayerStatus.STOPPED;
                 outputDevice.Dispose();
+                audiofile = null;
+                outputDevice = null;
+
                 NotifyStatusChanged();
             }   
         }
@@ -87,7 +95,9 @@ namespace MusikProgramm
         {
             if (outputDevice != null)
             {
+                previousVolume = audiofile.Volume;
                 audiofile.Volume = 0.0f; // kein nachklang mehr
+
                 outputDevice.Pause();
                 Status = PlayerStatus.PAUSED;
                 NotifyStatusChanged();
@@ -104,8 +114,29 @@ namespace MusikProgramm
             }
         }
 
+        public void SkipTo(Song song)
+        {
+            if (outputDevice != null && currentPlaylist.SongListSorted.Contains(song))
+            {
+                Stop();
+
+                Song song2;
+
+                do
+                {
+                    song2 = currentPlaylist.NextSong(false);
+                }
+                while (song2 != song); // playlist.currentSong gets also increased
+
+                SetupNextSong(song2.Path);
+            }
+        }
+
         private void OutputDevice_PlaybackStopped(object? sender, StoppedEventArgs e)
         {
+            Status = PlayerStatus.STOPPED;
+            NotifyStatusChanged();
+
             if (!manualStop)
             {
                 Log.Debug("Playing Next song in playlist");
@@ -147,7 +178,6 @@ namespace MusikProgramm
             currentPlaylist = playlist;
 
             Song nextSong = playlist.NextSong(true);
-            manualStop = false;
             SetupNextSong(nextSong.Path);
 
             if (nextSong.Progress != null)
@@ -162,7 +192,7 @@ namespace MusikProgramm
 
         public void Shuffle()
         {
-            if (!shuffle & currentPlaylist != null)
+            if (!shuffle && currentPlaylist != null)
             {
                 currentPlaylist.Shuffle();
                 shuffle = true;
@@ -176,7 +206,7 @@ namespace MusikProgramm
                     StatusPlaylist = PlayerPlaylistStatus.SHUFFLE;
                 }
             }
-            else if (shuffle & currentPlaylist != null)
+            else if (shuffle && currentPlaylist != null)
             {
                 if (repeat)
                 {
@@ -194,7 +224,7 @@ namespace MusikProgramm
 
         public void Repeat()
         {
-            if (!repeat & currentPlaylist != null)
+            if (!repeat && currentPlaylist != null)
             {
                 currentPlaylist.Repeat = true;
                 repeat = true;
@@ -207,7 +237,7 @@ namespace MusikProgramm
                     StatusPlaylist = PlayerPlaylistStatus.REPEAT;
                 }
             }
-            else if (repeat & currentPlaylist != null)
+            else if (repeat && currentPlaylist != null)
             {
                 currentPlaylist.Repeat = false;
                 repeat = false;
@@ -230,8 +260,12 @@ namespace MusikProgramm
             outputDevice = new WasapiOut();
             outputDevice.Init(audiofile);
             outputDevice.Play();
-
+            
             outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
+            audiofile.Volume = previousVolume;
+
+            Status = PlayerStatus.PLAYING;
+            NotifyStatusChanged();
         }
     }
 }

@@ -30,8 +30,9 @@
         <Label x:Name="LabelName" Grid.ColumnSpan="2" Content="Playlist - Name" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Bauhaus 93"/>
 
         <DockPanel Grid.Column="0" Grid.Row="3">
-            <Button Content="Add Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left"/>
-            <Button Content="Delete Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left"/>
+            <Button x:Name="ButtonAdd" Content="Add Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonAdd_Click"/>
+            <Button x:Name="ButtonEdit" Content="Edit Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonEdit_Click"/>
+            <Button x:Name="ButtonDelete" Content="Delete Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonDelete_Click"/>
         </DockPanel>
         <DockPanel Grid.Column="1" Grid.Row="3">
             <Label Content="Sort by:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="200 0 20 0" />
@@ -45,6 +46,6 @@
         </DockPanel>
 
         <local:PlayPauseSkip x:Name="UserControlPlayPauseSkip" Grid.Row="4" Grid.ColumnSpan="2"/>
-        <ListView x:Name="ListViewPlaylists" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="SlateBlue"/>
+        <ListView x:Name="ListViewSongs" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="SlateBlue" SelectionChanged="ListViewSongs_SelectionChanged"/>
     </Grid>
 </Window>

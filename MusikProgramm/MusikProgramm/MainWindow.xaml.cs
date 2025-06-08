@@ -83,6 +83,11 @@ namespace MusikProgramm
                 Log.Debug("No Playlists exist");
             }
 
+            if (!Directory.Exists("Songs"))
+            {
+                Directory.CreateDirectory("Songs");
+            }
+
             // See if there is a favourite song playlist
             bool favoritesFound = false;
 
@@ -149,16 +154,16 @@ namespace MusikProgramm
             lastEditedPlaylist = playlistWindow.playlist;
             lastEditedPlaylist.Save();
             playlistWindow = null;
+            UpdateListView();
         }
 
         private void ListViewPlaylists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ListViewPlaylists.SelectedIndex >= 0 && ListViewPlaylists.SelectedIndex < playlists.Count) // if no item is selected it breaks otherwise
             {
-                player.Stop();
                 currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
 
-                if (currentPlaylist != null && currentPlaylist.SongList.Count >= 1)
+                if (currentPlaylist.SongListSorted.Count > 0)
                 {
                     player.SetPlaylist(currentPlaylist);
                 }

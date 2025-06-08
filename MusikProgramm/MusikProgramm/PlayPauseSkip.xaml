@@ -37,12 +37,11 @@
             <Image x:Name="ImageRepeat" Source="/images/repeat_thin.png"/>
         </Button>
 
-        <Slider x:Name="SliderVolume" Minimum="0" Maximum="100" Grid.Column="6" VerticalAlignment="Center"
-        ValueChanged="SliderVolume_ValueChanged"/>
-        <Label x:Name="LabelVolume" Content="Volume: 0" Grid.Column="6" VerticalAlignment="Bottom"
-       HorizontalContentAlignment="Center" FontFamily="Bauhaus 93"/>
+        <Slider x:Name="SliderVolume" Minimum="0" Maximum="100" Grid.Column="6" VerticalAlignment="Center" ValueChanged="SliderVolume_ValueChanged" Value="50"/>
+        <Label x:Name="LabelVolume" Content="Volume: 0" Grid.Column="6" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" FontFamily="Bauhaus 93"/>
 
-
+        <Slider x:Name="SliderProgress" Minimum="0" Maximum="100" Grid.Column="0" VerticalAlignment="Center" Value="0" ValueChanged="SliderProgress_ValueChanged" />
+        <Label x:Name="LabelProgress" Content="Progress: 0" Grid.Column="0" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" FontFamily="Bauhaus 93"/>
 
     </Grid>
 </UserControl>

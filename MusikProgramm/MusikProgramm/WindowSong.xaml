@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusikProgramm"
         mc:Ignorable="d"
-        Title="WindowSong" Height="220" Width="350">
+        Title="WindowSong" Height="184" Width="350">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -17,22 +17,25 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <!-- Not needed anymore <RowDefinition Height="*"/>-->
         </Grid.RowDefinitions>
 
         <Label Content="Name:" Height="30px"/>
-        <Label Content="Artist:" Height="30px" Grid.Row="1"/>
+        <StackPanel Grid.Row="1" Height="30px" Orientation="Vertical" VerticalAlignment="Center">
+            <Label Content="Artists:" Height="15px" Padding="0" Margin="0 5 0 0"/>
+            <Label Content="Seperate Artists with ," FontSize="5px" Height="10px" Padding="2"/>
+        </StackPanel>
         <Label Content="Album:" Height="30px" Grid.Row="2"/>
         <Label Content="Release Year:" Height="30px" Grid.Row="3"/>
-        <Label Content="Path:" Height="30px" Grid.Row="4"/>
-        <Label Content="Album:" Height="30px" Grid.Row="5"/>
+        <!-- Not needed anymore <Label Content="Path:" Height="30px" Grid.Row="4"/> -->
+        <!-- <Label Content="Album:" Height="30px" Grid.Row="5"/> -->
         <TextBox x:Name="TextBoxName" Grid.Column="1" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxName_TextChanged"/>
         <TextBox x:Name="TextBoxArtist" Grid.Column="1" Grid.Row="1" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxArtist_TextChanged"/>
         <TextBox x:Name="TextBoxAlbum" Grid.Column="1" Grid.Row="2" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxAlbum_TextChanged"/>
         <TextBox x:Name="TextBoxReleaseYear" Grid.Column="1" Grid.Row="3" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxReleaseYear_TextChanged"/>
-        <TextBox x:Name="TextBoxPath" Grid.Column="1" Grid.Row="4" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxPath_TextChanged"/>
-
-        <StackPanel Grid.Column="1" Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
+        <!-- Not needed anymore <TextBox x:Name="TextBoxPath" Grid.Column="1" Grid.Row="4" Background="WhiteSmoke" Width="200px" Height="30px"/>-->
+        
+        <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="ButtonCancel" Content="Cancel" Height="30px" Width="100px" Margin="0 0 20 0" Click="ButtonCancel_Click"/>
             <Button x:Name="ButtonAdd" Content="Add" Height="30px" Width="100px" Margin="0 0 10 0" Click="ButtonAdd_Click"/>
         </StackPanel>

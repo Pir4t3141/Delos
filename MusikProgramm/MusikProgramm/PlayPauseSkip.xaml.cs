@@ -40,6 +40,7 @@ namespace MusikProgramm
                 case PlayerStatus.STOPPED:
                     break;
                 case PlayerStatus.PLAYING:
+                    player.audiofile.Volume = ((float)SliderVolume.Value) / 100;
                     ImagePlayPause.Source = new BitmapImage(new Uri("images/pause.png", UriKind.Relative));
                     // TODO: change icon
                     break;
@@ -107,6 +108,8 @@ namespace MusikProgramm
         public void SetPlayer(Player player)
         {
             this.player = player;
+
+
             player.PlayerStatusChanged += Player_PlayerStatusChanged;
             player.PlayerPlaylistStatusChanged += Player_PlayerPlaylistStatusChanged;
 
@@ -117,6 +120,7 @@ namespace MusikProgramm
                 case PlayerStatus.STOPPED:
                     break;
                 case PlayerStatus.PLAYING:
+                    player.audiofile.Volume = ((float)SliderVolume.Value) / 100;
                     ImagePlayPause.Source = new BitmapImage(new Uri("images/pause.png", UriKind.Relative));
                     break;
                 case PlayerStatus.PAUSED:
@@ -182,8 +186,25 @@ namespace MusikProgramm
         {
             if (LabelVolume != null)
             {
+                if (player.audiofile != null)
+                {
+                    player.audiofile.Volume = ((float)SliderVolume.Value) / 100; // 100 = 1.0; 42 = 0.42
+                }
                 LabelVolume.Content = $"Volume: {(int)SliderVolume.Value}";
             }
+        }
+
+        private void SliderProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            /* funktioniert nicht ganz richtig
+            if (LabelProgress != null && player.audiofile != null)
+            {
+                if (player.audiofile != null)
+                {
+                    player.audiofile.CurrentTime = TimeSpan.FromSeconds((SliderProgress.Value / 100) * (double)player.audiofile.TotalTime.TotalSeconds);
+                }
+                LabelProgress.Content = $"Progress: {player.audiofile.CurrentTime:mm\\:ss}/{player.audiofile.TotalTime:mm\\:ss}";
+            }*/
         }
     }
 }

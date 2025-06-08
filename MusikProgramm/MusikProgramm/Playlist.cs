@@ -42,7 +42,7 @@ namespace MusikProgramm
 
         public List<Song> SongList { get; set; } = new List<Song>();
 
-        private int currentSong { get; set; } = 0;
+        public int currentSong { get; private set; } = 0;
 
         public List<Song> SongListSorted { get; set; }
         
@@ -219,7 +219,7 @@ namespace MusikProgramm
 
         public override string ToString()
         {
-            return $"{Name}, {SongNumber} Songs, Playtime: {Playtime}";
+            return $"{Name}, {SongNumber} Songs, Playtime: {TimeSpan.FromSeconds(Playtime):mm\\:ss}";
         }
     }
 }
