@@ -33,12 +33,15 @@ namespace MusikProgramm
             this.player = player;
             LabelName.Content = playlist.Name;
 
+            UserControlPlayPauseSkip.SetPlayer(this.player);
+
             foreach (Song song in playlist.SongListSorted)
             {
                 ListViewSongs.Items.Add(song);
             }
 
-            UserControlPlayPauseSkip.SetPlayer(player);
+            manualIndexChange = true;
+            ListViewSongs.SelectedIndex = player.currentPlaylist.currentSong;
 
             player.PlayerStatusChanged += Player_PlayerStatusChanged;
 
@@ -53,6 +56,7 @@ namespace MusikProgramm
                 case PlayerPlaylistStatus.UNKNOWN:
                     break;
                 case PlayerPlaylistStatus.SHUFFLE:
+                    UpdateListView();
                     break;
                 case PlayerPlaylistStatus.REPEAT:
                     break;
@@ -75,6 +79,8 @@ namespace MusikProgramm
                 case PlayerStatus.STOPPED:
                     break;
                 case PlayerStatus.PLAYING:
+                    manualIndexChange = true;
+                    ListViewSongs.SelectedIndex = player.currentPlaylist.currentSong;
                     break;
                 case PlayerStatus.PAUSED:
                     break;
@@ -152,7 +158,7 @@ namespace MusikProgramm
             {
                 songToDelete = playlist.SongListSorted[ListViewSongs.SelectedIndex];
                 MessageBoxResult messageBoxresult = MessageBox.Show(
-                    $"Delete Song {playlist.SongListSorted[ListViewSongs.SelectedIndex].Name}",
+                    $"Delete Song {songToDelete.Name}",
                     "Confirmation Window",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question
@@ -160,6 +166,10 @@ namespace MusikProgramm
 
                 if (messageBoxresult == MessageBoxResult.Yes)
                 {
+                    if (player.currentPlaylist.SongListSorted[player.currentPlaylist.currentSong] == songToDelete)
+                    {
+                        player.Skip();
+                    }
                     playlist.RemoveSong(songToDelete);
                 }
             }
@@ -168,7 +178,17 @@ namespace MusikProgramm
 
         private void ListViewSongs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (ListViewSongs.SelectedIndex >= 0 && ListViewSongs.SelectedIndex < playlist.SongListSorted.Count && !manualIndexChange)
+            {
+                player.SkipTo(playlist.SongListSorted[ListViewSongs.SelectedIndex]);
+            }
+            manualIndexChange = false;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
         }
     }
 }
+    

@@ -10,6 +10,8 @@ using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Reflection.Metadata;
 using NAudio.CoreAudioApi;
+using TagLib.Mpeg;
+using System.Numerics;
 
 namespace MusikProgramm
 {
@@ -44,11 +46,15 @@ namespace MusikProgramm
 
         public event EventHandler<PlayerPlaylistStatus> PlayerPlaylistStatusChanged;
 
+        public event EventHandler AudioFileReaderVolumeChanged;
+
+        public event EventHandler AudioFileProgressChanged;
+
         private bool shuffle = false;
 
         private bool repeat = false;
 
-        private float previousVolume = 1.0f;
+        public float previousVolume { private set; get; } = 0.5f;
 
         private bool manualStop = false; // used to see if stop of outputdevice was stopped because song is finished or Stop() was used (continue playing next song or don't) 
 
@@ -170,6 +176,16 @@ namespace MusikProgramm
             PlayerPlaylistStatusChanged?.Invoke(this, StatusPlaylist);
         }
 
+        public void NotifyVolumeChanged()
+        {
+            AudioFileReaderVolumeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void NotifyProgressChanged()
+        {
+            AudioFileProgressChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public void SetPlaylist(Playlist playlist)
         {
             SaveProgress();
@@ -266,6 +282,24 @@ namespace MusikProgramm
 
             Status = PlayerStatus.PLAYING;
             NotifyStatusChanged();
+        }
+
+        public void SetVolume(float valueNew)
+        {
+            if (audiofile != null)
+            {
+                audiofile.Volume = valueNew;
+                NotifyVolumeChanged();
+            }
+        }
+
+        public void SetProgress(TimeSpan timeSpanFromSeconds)
+        {
+            if (audiofile != null)
+            {
+                audiofile.CurrentTime = timeSpanFromSeconds;
+                NotifyProgressChanged();
+            }
         }
     }
 }

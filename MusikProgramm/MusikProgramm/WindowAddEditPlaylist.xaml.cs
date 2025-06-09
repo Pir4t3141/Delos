@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MusikProgramm
 {
@@ -19,38 +19,44 @@ namespace MusikProgramm
     /// </summary>
     public partial class WindowAddEditPlaylist : Window
     {
-        MainWindow mainWindow;
+        List <Playlist> playlists;
         public string Name;
         private bool Contains = false;
 
-        public WindowAddEditPlaylist(MainWindow mainWindow)
+        public WindowAddEditPlaylist(List<Playlist> playlists)
         {
             InitializeComponent();
-            this.mainWindow = mainWindow;
+            this.playlists = playlists;
+        }
+
+        public WindowAddEditPlaylist(List<Playlist> playlists, bool editNotAdd) : this(playlists)
+        {
+            ButtonAdd.Content = "Edit";
         }
 
         private void TextBoxName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            bool _contains = false;
+            bool alreadyExists = false;
+            bool invalidCharacterFound = false;
 
-            foreach (Playlist playlist in mainWindow.playlists)
+            foreach (Playlist playlist in playlists)
             {
                 if (playlist.Name == TextBoxName.Text)
                 {
-                    _contains = true;
+                    alreadyExists = true;
+                }
+            }
+            string text = TextBoxName.Text;
+
+            foreach (char invalidCharacter in Path.GetInvalidFileNameChars())
+            {
+                if (text.Contains(invalidCharacter))
+                {
+                    invalidCharacterFound = true;
                 }
             }
 
-            if (_contains)
-            {
-                Contains = true;
-            }
-            else
-            {
-                Contains = false;
-            }
-
-            if (!String.IsNullOrEmpty(TextBoxName.Text) && !Contains)
+            if (!String.IsNullOrEmpty(text) && !alreadyExists && !text.Contains("]") && !text.Contains("[") && !invalidCharacterFound)
             {
 
                 TextBoxName.Background = null;

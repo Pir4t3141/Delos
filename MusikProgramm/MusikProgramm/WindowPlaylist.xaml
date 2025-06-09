@@ -36,7 +36,7 @@
         </DockPanel>
         <DockPanel Grid.Column="1" Grid.Row="3">
             <Label Content="Sort by:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="200 0 20 0" />
-            <ComboBox Width="100" Height="30" Margin="5" HorizontalAlignment="Right">
+            <ComboBox Width="100" Height="30" Margin="5" HorizontalAlignment="Right" SelectionChanged="ComboBox_SelectionChanged">
                 <ComboBoxItem Content="Date"/>
                 <ComboBoxItem Content="Artist"/>
                 <ComboBoxItem Content="Name"/>

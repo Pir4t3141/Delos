@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TagLib.Mpeg;
 
 namespace MusikProgramm
@@ -24,11 +25,16 @@ namespace MusikProgramm
     public partial class PlayPauseSkip : UserControl
     {
         public Player? player = null;
+        private bool manualVolumeChange = false;
 
+        private DispatcherTimer timer = new DispatcherTimer();
 
         public PlayPauseSkip()
         {
             InitializeComponent();
+
+            timer.Interval = TimeSpan.FromSeconds(0.25);
+            timer.Tick += Timer_Tick;
         }
 
         private void Player_PlayerStatusChanged(object? sender, PlayerStatus e)
@@ -38,8 +44,10 @@ namespace MusikProgramm
                 case PlayerStatus.UNKNOWN:
                     break;
                 case PlayerStatus.STOPPED:
+                    timer.Stop();
                     break;
                 case PlayerStatus.PLAYING:
+                    timer.Start();
                     player.audiofile.Volume = ((float)SliderVolume.Value) / 100;
                     ImagePlayPause.Source = new BitmapImage(new Uri("images/pause.png", UriKind.Relative));
                     // TODO: change icon
@@ -51,6 +59,11 @@ namespace MusikProgramm
                 default:
                     break;
             }
+        }
+
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+            player.NotifyProgressChanged();
         }
 
         private void ButtonPlayPause_Click(object sender, RoutedEventArgs e)
@@ -100,18 +113,22 @@ namespace MusikProgramm
             }
         }
 
-        public void ResetAfterPlaylistSwitch()
-        {
-            //TODO  
-        }
-
         public void SetPlayer(Player player)
         {
             this.player = player;
+            if (player.Status != PlayerStatus.PLAYING && player.Status != PlayerStatus.PAUSED)
+            {
+                player.Play();
+            }
 
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(0.25);
+            timer.Tick += Timer_Tick;
 
             player.PlayerStatusChanged += Player_PlayerStatusChanged;
             player.PlayerPlaylistStatusChanged += Player_PlayerPlaylistStatusChanged;
+            player.AudioFileReaderVolumeChanged += Player_AudioFileReaderVolumeChanged;
+            player.AudioFileProgressChanged += Player_AudioFileProgressChanged;
 
             switch (player.Status)
             {
@@ -120,7 +137,7 @@ namespace MusikProgramm
                 case PlayerStatus.STOPPED:
                     break;
                 case PlayerStatus.PLAYING:
-                    player.audiofile.Volume = ((float)SliderVolume.Value) / 100;
+                    timer.Start();
                     ImagePlayPause.Source = new BitmapImage(new Uri("images/pause.png", UriKind.Relative));
                     break;
                 case PlayerStatus.PAUSED:
@@ -153,6 +170,29 @@ namespace MusikProgramm
                 default:
                     break;
             }
+
+            if (player.audiofile != null)
+            {
+                manualVolumeChange = true;
+                SliderVolume.Value = player.previousVolume * 100;
+                LabelVolume.Content = $"Volume: {(int)SliderVolume.Value}";
+
+                SliderProgress.Value = (player.audiofile.CurrentTime * 100) / player.audiofile.TotalTime;
+                LabelProgress.Content = $"Progress: {player.audiofile.CurrentTime:mm\\:ss}/{player.audiofile.TotalTime:mm\\:ss}";
+            }
+        }
+
+        private void Player_AudioFileProgressChanged(object? sender, EventArgs e)
+        {
+            SliderProgress.Value = (player.audiofile.CurrentTime * 100) / player.audiofile.TotalTime;
+            LabelProgress.Content = $"Progress: {player.audiofile.CurrentTime:mm\\:ss}/{player.audiofile.TotalTime:mm\\:ss}";
+        }
+
+        private void Player_AudioFileReaderVolumeChanged(object? sender, EventArgs e)
+        {
+            manualVolumeChange = true;
+            SliderVolume.Value = player.audiofile.Volume * 100;
+            LabelVolume.Content = $"Volume: {(int)SliderVolume.Value}";
         }
 
         private void Player_PlayerPlaylistStatusChanged(object? sender, PlayerPlaylistStatus e)
@@ -184,27 +224,32 @@ namespace MusikProgramm
 
         private void SliderVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (LabelVolume != null)
+            if (LabelVolume != null && !manualVolumeChange)
             {
-                if (player.audiofile != null)
-                {
-                    player.audiofile.Volume = ((float)SliderVolume.Value) / 100; // 100 = 1.0; 42 = 0.42
-                }
+                player.SetVolume((float)SliderVolume.Value / 100);
                 LabelVolume.Content = $"Volume: {(int)SliderVolume.Value}";
             }
+            manualVolumeChange = false;
         }
 
-        private void SliderProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void SliderProgress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
-            /* funktioniert nicht ganz richtig
-            if (LabelProgress != null && player.audiofile != null)
+            player.Pause();
+            timer.Stop();
+
+        }
+
+        private void SliderProgress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            if (LabelProgress != null && player != null && player.audiofile != null)
             {
-                if (player.audiofile != null)
-                {
-                    player.audiofile.CurrentTime = TimeSpan.FromSeconds((SliderProgress.Value / 100) * (double)player.audiofile.TotalTime.TotalSeconds);
-                }
+                timer.Start();
+
+                player.SetProgress(TimeSpan.FromSeconds((SliderProgress.Value / 100) * (double)player.audiofile.TotalTime.TotalSeconds));
+
                 LabelProgress.Content = $"Progress: {player.audiofile.CurrentTime:mm\\:ss}/{player.audiofile.TotalTime:mm\\:ss}";
-            }*/
+            }
+            player.Play();
         }
     }
 }

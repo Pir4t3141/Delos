@@ -65,7 +65,7 @@ namespace MusikProgramm
 
         public override string ToString()
         {
-            return $"{Name} released in {ReleaseYear} by {string.Join(", ", Artists)}";
+            return $"{Name} released in {ReleaseYear} by {string.Join(", ", Artists)} in Album {Album}";
         }
         
         public string SerializeToString()

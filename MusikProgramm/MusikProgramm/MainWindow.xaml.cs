@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using NAudio;
 using NAudio.Wave;
 using Serilog;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace MusikProgramm
 {
@@ -108,8 +109,18 @@ namespace MusikProgramm
             UpdateListView();
 
             UserControlPlayPauseSkip.SetPlayer(player);
-            
-            
+
+            this.Closed += MainWindow_Closed;
+        }
+
+        private void MainWindow_Closed(object? sender, EventArgs e)
+        {
+            player.SaveProgress();
+
+            if (playlistWindow != null)
+            {
+                playlistWindow.Close();
+            }
         }
 
         private void Player_PlayerStatusChanged(object? sender, PlayerStatus e)
@@ -162,24 +173,28 @@ namespace MusikProgramm
             if (ListViewPlaylists.SelectedIndex >= 0 && ListViewPlaylists.SelectedIndex < playlists.Count) // if no item is selected it breaks otherwise
             {
                 currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
+                
 
                 if (currentPlaylist.SongListSorted.Count > 0)
                 {
                     player.SetPlaylist(currentPlaylist);
+                    UserControlPlayPauseSkip.SetPlayer(player);
                 }
             }
         }
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
-            WindowAddEditPlaylist windowAddPlaylist = new WindowAddEditPlaylist(this);
+            WindowAddEditPlaylist windowAddPlaylist = new WindowAddEditPlaylist(playlists);
 
             if (windowAddPlaylist.ShowDialog() == true)
             {
                 String? Name = windowAddPlaylist.Name;
                 if (Name != null)
                 {
-                    playlists.Add(new Playlist(Name));
+                    Playlist playlistNew = new Playlist(Name);
+                    playlists.Add(playlistNew);
+                    playlistNew.Save();
                 }
             }
             UpdateListView();
@@ -194,37 +209,53 @@ namespace MusikProgramm
             }
         }
 
-        /* für alten weg zum musik abspielen
-         * 
-        public void PlaySong(Song nextSong)
+        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-            audiofile = new AudioFileReader(nextSong.Path);
-            outputDevice = new WasapiOut();
-            outputDevice.Init(audiofile);
-            outputDevice.Play();
-            outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
+            Playlist playlistToDelete;
+            if (ListViewPlaylists.SelectedIndex >= 0 && ListViewPlaylists.SelectedIndex < playlists.Count)
+            {
+                playlistToDelete = playlists[ListViewPlaylists.SelectedIndex];
+                MessageBoxResult messageBoxresult = MessageBox.Show(
+                    $"Delete Playlist {playlistToDelete.Name}",
+                    "Confirmation Window",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question
+                    );
+
+                if (messageBoxresult == MessageBoxResult.Yes)
+                {
+                    string filePath = $"Playlists//{playlistToDelete.Name.Replace(" ", "]")}.txt"; // TODO: replace with file type
+                    playlists.Remove(playlistToDelete);
+
+                    if (File.Exists(filePath))
+                    {
+                        try
+                        {
+                            File.Delete(filePath);
+                        }
+                        catch
+                        {
+                            MessageBox.Show($"Error deleting the playlist {playlistToDelete.Name}");
+                        }
+                    }
+                }
+            }
+            UpdateListView();
         }
 
-        public void StopOutputDevice()
+        private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
-            outputDevice.PlaybackStopped -= OutputDevice_PlaybackStopped; // sonst wird das event beim stoppen ausgelöst
-            outputDevice.Stop();
-            outputDevice.Dispose();
-            outputDevice = null;
+            WindowAddEditPlaylist windowAddPlaylist = new WindowAddEditPlaylist(playlists, true);
+
+            if (windowAddPlaylist.ShowDialog() == true)
+            {
+                String? Name = windowAddPlaylist.Name;
+                if (Name != null)
+                {
+                    currentPlaylist.Name = Name;
+                }
+            }
+            UpdateListView();
         }
-
-        public void Play()
-        {
-            outputDevice.Play();
-            // TODO: Player Bar anpassen
-
-            // TODO: Playlist Window anpassen
-
-        }
-
-        public void Stop()
-        {
-            // TODO Stoppen + player anpassen
-        }*/
     }
 }

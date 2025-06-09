@@ -186,6 +186,7 @@ namespace MusikProgramm
 
         public void Shuffle()
         {
+            Song lastSong = SongListSorted[currentSong];
             Log.Debug($"Before shuffle: {String.Join(',', SongListSorted)}");
             List<Song> list = new List<Song>(SongListSorted);
             SongListSorted.Clear();
@@ -198,6 +199,8 @@ namespace MusikProgramm
                 list.RemoveAt(k);
             }
             Log.Debug($"After shuffle: {String.Join(',', SongListSorted)}");
+
+            currentSong = SongListSorted.IndexOf(lastSong);
         }
 
         public void ResetShuffleSort()
