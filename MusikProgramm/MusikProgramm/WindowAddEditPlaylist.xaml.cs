@@ -32,6 +32,7 @@ namespace MusikProgramm
         public WindowAddEditPlaylist(List<Playlist> playlists, bool editNotAdd) : this(playlists)
         {
             ButtonAdd.Content = "Edit";
+            this.Title = "Edit Playlist";
         }
 
         private void TextBoxName_TextChanged(object sender, TextChangedEventArgs e)

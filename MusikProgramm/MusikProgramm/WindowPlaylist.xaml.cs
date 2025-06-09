@@ -19,15 +19,30 @@ namespace MusikProgramm
     /// <summary>
     /// Interaction logic for WindowPlaylist.xaml
     /// </summary>
+    /// 
+
+    public enum SortTypes
+    {
+        UNKNOWN = 0,
+        RELEASEYEAR = 1,
+        ARTIST = 2,
+        NAME = 3,
+        DEFAULT = 4
+    }
+
     public partial class WindowPlaylist : Window
     {
         public Playlist playlist { get; private set; } = new Playlist("Empty");
         private Player player = new Player();
         private bool manualIndexChange = false;
+        private bool sortedUp = true;
+        public SortTypes sortType { get; set; } = SortTypes.DEFAULT;
 
         public WindowPlaylist(Playlist playlist, Player player)
         {
             InitializeComponent();
+
+            this.Title = $"{playlist.Name}";
 
             this.playlist = playlist;
             this.player = player;
@@ -40,8 +55,11 @@ namespace MusikProgramm
                 ListViewSongs.Items.Add(song);
             }
 
-            manualIndexChange = true;
-            ListViewSongs.SelectedIndex = player.currentPlaylist.currentSong;
+            if (playlist.SongListSorted.Count > 0)
+            {
+                manualIndexChange = true;
+                ListViewSongs.SelectedIndex = player.currentPlaylist.currentSong;
+            }
 
             player.PlayerStatusChanged += Player_PlayerStatusChanged;
 
@@ -185,9 +203,60 @@ namespace MusikProgramm
             manualIndexChange = false;
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ButtonSortDirection_Click(object sender, RoutedEventArgs e)
         {
+            if ($"{ButtonSortDirection.Content}" == "⭡")
+            {
+                sortedUp = false;
+                ButtonSortDirection.Content = "⭣";
+            }
+            else
+            {
+                sortedUp = true;
+                ButtonSortDirection.Content = "⭡";
+            }
+            Sort();
+        }
 
+        private void ComboBoxSortType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (player == null || playlist == null || ListViewSongs == null)
+            {
+                return;
+            }
+            Sort();
+        }
+
+        private void Sort()
+        {
+            Song songPrevPlayed = playlist.SongListSorted[playlist.currentSong];
+
+            var selectedItem = (ComboBoxItem)ComboBoxSortType.SelectedItem;
+            string selectedItemString = selectedItem.Content.ToString();
+
+            switch (selectedItemString)
+            {
+                case "Release Year":
+                    sortType = SortTypes.RELEASEYEAR;
+                    break;
+                case "Artist Number 1":
+                    sortType = SortTypes.ARTIST;
+                    break;
+                case "Name":
+                    sortType = SortTypes.NAME;
+                    break;
+                case "Default":
+                    sortType = SortTypes.DEFAULT;
+                    break;
+                default:
+                    break;
+            }
+
+            playlist.Sort(sortType, sortedUp);
+            UpdateListView();
+
+            manualIndexChange = true;
+            ListViewSongs.SelectedItem = songPrevPlayed;
         }
     }
 }

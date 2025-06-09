@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusikProgramm"
         mc:Ignorable="d"
-        Title="WindowPlaylist" Height="450" Width="800">
+        Title="PlaylistName" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -34,16 +34,16 @@
             <Button x:Name="ButtonEdit" Content="Edit Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonEdit_Click"/>
             <Button x:Name="ButtonDelete" Content="Delete Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonDelete_Click"/>
         </DockPanel>
-        <DockPanel Grid.Column="1" Grid.Row="3">
-            <Label Content="Sort by:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="200 0 20 0" />
-            <ComboBox Width="100" Height="30" Margin="5" HorizontalAlignment="Right" SelectionChanged="ComboBox_SelectionChanged">
-                <ComboBoxItem Content="Date"/>
-                <ComboBoxItem Content="Artist"/>
+        <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+            <Label Content="Sort by:" HorizontalAlignment="Right" Margin="0 0 20 0"/>
+            <Button x:Name="ButtonSortDirection" Content="⭡" Width="30px" Margin="0 0 20 0" Click="ButtonSortDirection_Click"/>
+            <ComboBox x:Name="ComboBoxSortType" Width="120" Height="30" Margin="0 0 30 0" SelectionChanged="ComboBoxSortType_SelectionChanged">
+                <ComboBoxItem Content="Release Year"/>
+                <ComboBoxItem Content="Artist Number 1"/>
                 <ComboBoxItem Content="Name"/>
-                <ComboBoxItem Content="Default" IsSelected="True"/>
-                <!--No sort (users own order)-->
+                <ComboBoxItem Content="Default" IsSelected="True"/> <!--No sort (users own order)-->
             </ComboBox>
-        </DockPanel>
+        </StackPanel>
 
         <local:PlayPauseSkip x:Name="UserControlPlayPauseSkip" Grid.Row="4" Grid.ColumnSpan="2"/>
         <ListView x:Name="ListViewSongs" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="SlateBlue" SelectionChanged="ListViewSongs_SelectionChanged"/>

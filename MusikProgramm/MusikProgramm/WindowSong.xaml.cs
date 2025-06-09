@@ -39,6 +39,8 @@ namespace MusikProgramm
             TextBoxArtist.Text = String.Join(',', song.Artists);
             TextBoxAlbum.Text = song.Album;
             TextBoxReleaseYear.Text = $"{song.ReleaseYear}";
+
+            this.Title = $"Edit {song.Name}";
         }
 
         private void TextBoxName_TextChanged(object sender, TextChangedEventArgs e)

@@ -105,11 +105,11 @@ namespace MusikProgramm
             return serialized;
         }
 
-        public static Song Deserialize(string SerializedString) // TODO: Ask Teacher if faster than reading metadata 
+        public static Song Deserialize(string SerializedString)
         {
 
             //]17]0]C:\Users\Familie_Reichart\Downloads\epic.mp3]]]
-            string[] strings = SerializedString.Split(']'); // no try{}catch{} needed: add in playlist class TODO: Add in Playlist class
+            string[] strings = SerializedString.Split(']');
             Song song = new Song(strings[3])
             {
                 Name = strings[0],

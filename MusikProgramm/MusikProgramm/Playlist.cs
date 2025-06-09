@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Serilog;
 
 namespace MusikProgramm
@@ -40,7 +41,7 @@ namespace MusikProgramm
             private set { }
         } 
 
-        public List<Song> SongList { get; set; } = new List<Song>();
+        private List<Song> SongList { get; set; } = new List<Song>();
 
         public int currentSong { get; private set; } = 0;
 
@@ -128,9 +129,42 @@ namespace MusikProgramm
             return SongListSorted[currentSong];
         }
 
-        public void Sort()
+        public void Sort(SortTypes sortType, bool sortedUp)
         {
-            //TODO: look how to do it
+            Song songPrevPlayed = SongListSorted[currentSong];
+
+            switch (sortType)
+            {
+                case SortTypes.UNKNOWN:
+                    break;
+                case SortTypes.RELEASEYEAR:
+                    SongListSorted = SongList.OrderBy(song => song.ReleaseYear).ToList();
+                    break;
+                case SortTypes.ARTIST:
+                    SongListSorted = SongList.OrderBy(song => song.Artists[0]).ToList();
+                    break;
+                case SortTypes.NAME:
+                    SongListSorted = SongList.OrderBy(song => song.Name).ToList();
+                    break;
+                case SortTypes.DEFAULT:
+                    SongListSorted = new List<Song>(SongList);
+                    break;
+                default:
+                    break;
+            }
+
+            if (!sortedUp)
+            {
+                SongListSorted.Reverse();
+            }
+
+            foreach (Song song in SongListSorted)
+            {
+                if (songPrevPlayed == song)
+                {
+                    currentSong = SongListSorted.IndexOf(song);
+                }
+            }
         }
 
         public Song NextSong(bool firstStart)
