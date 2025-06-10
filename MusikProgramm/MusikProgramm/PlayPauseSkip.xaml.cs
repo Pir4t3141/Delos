@@ -184,12 +184,20 @@ namespace MusikProgramm
 
         private void Player_AudioFileProgressChanged(object? sender, EventArgs e)
         {
+            if (player.audiofile == null)
+            {
+                return;
+            }
             SliderProgress.Value = (player.audiofile.CurrentTime * 100) / player.audiofile.TotalTime;
             LabelProgress.Content = $"Progress: {player.audiofile.CurrentTime:mm\\:ss}/{player.audiofile.TotalTime:mm\\:ss}";
         }
 
         private void Player_AudioFileReaderVolumeChanged(object? sender, EventArgs e)
         {
+            if (player.audiofile == null)
+            {
+                return;
+            }
             manualVolumeChange = true;
             SliderVolume.Value = player.audiofile.Volume * 100;
             LabelVolume.Content = $"Volume: {(int)SliderVolume.Value}";
@@ -236,7 +244,6 @@ namespace MusikProgramm
         {
             player.Pause();
             timer.Stop();
-
         }
 
         private void SliderProgress_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)

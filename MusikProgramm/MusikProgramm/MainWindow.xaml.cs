@@ -161,7 +161,7 @@ namespace MusikProgramm
         }
 
         private void PlaylistWindow_Closed(object? sender, EventArgs e)
-        {
+        { 
             lastEditedPlaylist = playlistWindow.playlist;
             lastEditedPlaylist.Save();
             playlistWindow = null;
@@ -177,7 +177,7 @@ namespace MusikProgramm
 
                 if (currentPlaylist.SongListSorted.Count > 0)
                 {
-                    player.SetPlaylist(currentPlaylist);
+                    player.SetPlaylist(currentPlaylist, true);
                     UserControlPlayPauseSkip.SetPlayer(player);
                 }
             }
@@ -245,6 +245,12 @@ namespace MusikProgramm
 
         private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
+            if (currentPlaylist == null)
+            {
+                MessageBox.Show("No Playlist Selected");
+                return;
+            }
+
             WindowAddEditPlaylist windowAddPlaylist = new WindowAddEditPlaylist(playlists, true);
 
             if (windowAddPlaylist.ShowDialog() == true)

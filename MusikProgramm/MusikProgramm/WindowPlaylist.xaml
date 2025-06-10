@@ -8,8 +8,8 @@
         Title="PlaylistName" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1.25*"/>
+            <ColumnDefinition Width="0.75*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -33,6 +33,7 @@
             <Button x:Name="ButtonAdd" Content="Add Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonAdd_Click"/>
             <Button x:Name="ButtonEdit" Content="Edit Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonEdit_Click"/>
             <Button x:Name="ButtonDelete" Content="Delete Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonDelete_Click"/>
+            <Button x:Name="ButtonSaveMetadata" Content="Save changes to Metadata"  Width="150" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonSaveMetadata_Click"/>
         </DockPanel>
         <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
             <Label Content="Sort by:" HorizontalAlignment="Right" Margin="0 0 20 0"/>
