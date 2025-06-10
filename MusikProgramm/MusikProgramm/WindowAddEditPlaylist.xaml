@@ -20,8 +20,8 @@
         <TextBox x:Name="TextBoxName" Grid.Column="1" Background="WhiteSmoke" Width="200px" Height="30px" TextChanged="TextBoxName_TextChanged"/>
 
         <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="ButtonCancel" Content="Cancel" Height="30px" Width="100px" Margin="0 0 20 0" Click="ButtonCancel_Click"/>
-            <Button x:Name="ButtonAdd" Content="Add" Height="30px" Width="100px" Margin="0 0 10 0" Click="ButtonAdd_Click"/>
+            <Button x:Name="ButtonCancel" IsCancel="True" Content="Cancel" Height="30px" Width="100px" Margin="0 0 20 0" Click="ButtonCancel_Click"/>
+            <Button x:Name="ButtonAdd" IsDefault="True" Content="Add" Height="30px" Width="100px" Margin="0 0 10 0" Click="ButtonAdd_Click"/>
         </StackPanel>
     </Grid>
 </Window>
