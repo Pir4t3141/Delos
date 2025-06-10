@@ -29,6 +29,8 @@ namespace MusikProgramm
 
         private DispatcherTimer timer = new DispatcherTimer();
 
+        private bool isDraggingSlider = false;
+
         public PlayPauseSkip()
         {
             InitializeComponent();
@@ -173,7 +175,6 @@ namespace MusikProgramm
 
             if (player.audiofile != null)
             {
-                MessageBox.Show($"{player.previousVolume}");
                 manualVolumeChange = true;
                 SliderVolume.Value = player.previousVolume * 100;
                 LabelVolume.Content = $"Volume: {(int)SliderVolume.Value}";
@@ -185,7 +186,7 @@ namespace MusikProgramm
 
         private void Player_AudioFileProgressChanged(object? sender, EventArgs e)
         {
-            if (player.audiofile == null)
+            if (player?.audiofile == null || isDraggingSlider)
             {
                 return;
             }
@@ -243,6 +244,7 @@ namespace MusikProgramm
 
         private void SliderProgress_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
+            isDraggingSlider = true;
             player.Pause();
             timer.Stop();
         }
@@ -251,12 +253,13 @@ namespace MusikProgramm
         {
             if (LabelProgress != null && player != null && player.audiofile != null)
             {
-                timer.Start();
-
                 player.SetProgress(TimeSpan.FromSeconds((SliderProgress.Value / 100) * (double)player.audiofile.TotalTime.TotalSeconds));
 
                 LabelProgress.Content = $"Progress: {player.audiofile.CurrentTime:mm\\:ss}/{player.audiofile.TotalTime:mm\\:ss}";
             }
+
+            isDraggingSlider = false;
+            timer.Start();
             player.Play();
         }
     }
