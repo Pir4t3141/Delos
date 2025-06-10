@@ -30,16 +30,12 @@ namespace MusikProgramm
         {
             InitializeComponent();
             this.song = song;
+            EditTextBoxesData();
         }
 
         public WindowSong(Song song, bool editNotAdd) : this(song)
         {
             ButtonAdd.Content = "Edit";
-            TextBoxName.Text = song.Name;
-            TextBoxArtist.Text = String.Join(',', song.Artists);
-            TextBoxAlbum.Text = song.Album;
-            TextBoxReleaseYear.Text = $"{song.ReleaseYear}";
-
             this.Title = $"Edit {song.Name}";
         }
 
@@ -117,6 +113,14 @@ namespace MusikProgramm
             song.ReleaseYear = Convert.ToUInt32(TextBoxReleaseYear.Text);
 
             this.DialogResult = true;
+        }
+
+        private void EditTextBoxesData()
+        {
+            TextBoxName.Text = song.Name;
+            TextBoxArtist.Text = String.Join(',', song.Artists);
+            TextBoxAlbum.Text = song.Album;
+            TextBoxReleaseYear.Text = $"{song.ReleaseYear}";
         }
     }
 }

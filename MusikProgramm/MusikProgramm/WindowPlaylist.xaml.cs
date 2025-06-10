@@ -127,6 +127,7 @@ namespace MusikProgramm
             if (filePath != null)
             {
                 song = new Song(filePath);
+                song.LoadFromMetaData();
 
                 WindowSong windowSong = new WindowSong(song);
 
@@ -229,8 +230,6 @@ namespace MusikProgramm
 
         private void Sort()
         {
-            Song songPrevPlayed = playlist.SongListSorted[playlist.currentSong];
-
             var selectedItem = (ComboBoxItem)ComboBoxSortType.SelectedItem;
             string selectedItemString = selectedItem.Content.ToString();
 
@@ -256,7 +255,6 @@ namespace MusikProgramm
             UpdateListView();
 
             manualIndexChange = true;
-            ListViewSongs.SelectedItem = songPrevPlayed;
         }
     }
 }
