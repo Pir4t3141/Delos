@@ -36,13 +36,15 @@ Auch können Songs bzw Audios in das Programm hochgeladen werden
 ## Projektzeitplan:
 | Wann? | Was? | Wer? | Fortschritt |
 |----------|----------|----------|----------|
-| 14.05 | Grunddesign der GUI | Chiara | 0% |
-| 14.05 | Grundaufbau der Klassen & Überarbeitung der Planung | Tobias | 0% |
-| 21.05 | Verbessern des Designs | Chiara | 0% |
-| 28.05 | User Control für Play Pause usw. | Chiara | 0% |
-| 27.05 + 28.05 | Klassen so gut wie fertig coden | Tobias | 0% |
-| 04.06 | (erfolglose) Fehlerbehebung | Chiara, Tobi, Herr Bechtold | 0% |
-| 06.06 | (erfolgreiche) Fehlerbehebung | Chiara, Tobi, Herr Diem | 0% |
+| 14.05 | Grunddesign der GUI | Chiara | 100% |
+| 14.05 | Grundaufbau der Klassen & Überarbeitung der Planung | Tobias | 100% |
+| 21.05 | Verbessern des Designs | Chiara | 100% |
+| 28.05 | User Control für Play Pause usw. | Chiara | 100% |
+| 27.05 + 28.05 | Klassen so gut wie fertig coden | Tobias | 100% |
+| 04.06 | (erfolglose) Fehlerbehebung | Chiara, Tobi, Herr Bechtold | 100% |
+| 06.06 | (erfolgreiche) Fehlerbehebung | Chiara, Tobi, Herr Diem | 100% |
+| 10.06 | Fehler suchen und behandeln| Chiara, Tobi | 100% |
+| 06.06 | (erfolgreiche) Fehlerbehebung | Chiara, Tobi, Herr Diem | 100% |
 
 
 
@@ -89,6 +91,8 @@ Auch können Songs bzw Audios in das Programm hochgeladen werden
 
 
 ## Bedienungsanleitung
+- App öffnen -> Playlists werden direkt angezeigt -> Doppelklick auf eine Playlist um sie genauer anzuschauen -> über Buttons Songs / Playlists hinzufügen / umbennen usw.
+
 ## Bekannte Bugs / Probleme die noch vorliegen
 ## Erweiterungsmöglichkeiten
 
