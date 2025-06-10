@@ -56,18 +56,23 @@ namespace MusikProgramm
 
         public float previousVolume { private set; get; } = 0.5f;
 
-        private bool manualStop = false; // used to see if stop of outputdevice was stopped because song is finished or Stop() was used (continue playing next song or don't) 
+        private bool manualStop = false; // used to see if stop of outputdevice was stopped because song is finished or Stop() was used (continue playing next song or don't)
+
+        private bool volumeIsZeroBecauseOfPausing = false;
 
 
         public void Play()
         {
             if (outputDevice != null)
             {
+                volumeIsZeroBecauseOfPausing = false;
+
                 audiofile.Volume = previousVolume;
                 Status = PlayerStatus.PLAYING;
 
                 outputDevice.Play();
                 NotifyStatusChanged();
+                NotifyVolumeChanged();
             }
         }
 
@@ -75,7 +80,14 @@ namespace MusikProgramm
         {
             if (outputDevice != null)
             {
-                previousVolume = audiofile.Volume;
+                if (audiofile.Volume == 0 && volumeIsZeroBecauseOfPausing)
+                {
+                }
+                else 
+                {
+                    previousVolume = audiofile.Volume;
+                }
+
 
                 manualStop = true;
 
@@ -103,6 +115,7 @@ namespace MusikProgramm
             {
                 previousVolume = audiofile.Volume;
                 audiofile.Volume = 0.0f; // kein nachklang mehr
+                volumeIsZeroBecauseOfPausing = true;
 
                 outputDevice.Pause();
                 Status = PlayerStatus.PAUSED;

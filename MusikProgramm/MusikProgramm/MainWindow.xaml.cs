@@ -177,6 +177,7 @@ namespace MusikProgramm
 
                 if (currentPlaylist.SongListSorted.Count > 0)
                 {
+                    // when switching while paused volume = 0
                     player.SetPlaylist(currentPlaylist);
                     UserControlPlayPauseSkip.SetPlayer(player);
                 }

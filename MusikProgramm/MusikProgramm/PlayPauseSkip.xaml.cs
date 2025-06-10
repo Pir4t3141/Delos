@@ -173,6 +173,7 @@ namespace MusikProgramm
 
             if (player.audiofile != null)
             {
+                MessageBox.Show($"{player.previousVolume}");
                 manualVolumeChange = true;
                 SliderVolume.Value = player.previousVolume * 100;
                 LabelVolume.Content = $"Volume: {(int)SliderVolume.Value}";
