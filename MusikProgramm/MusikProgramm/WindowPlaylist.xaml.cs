@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using Serilog;
 
 namespace MusikProgramm
 {
@@ -37,6 +38,7 @@ namespace MusikProgramm
         private bool manualIndexChange = false;
         private bool sortedUp = true;
         public SortTypes sortType { get; set; } = SortTypes.DEFAULT;
+        public List<Song> songsMetaDataGoingToBeChanged = new List<Song>();
 
         public WindowPlaylist(Playlist playlist, Player player)
         {
@@ -127,14 +129,16 @@ namespace MusikProgramm
             if (filePath != null)
             {
                 song = new Song(filePath);
+                song.LoadFromMetaData();
 
                 WindowSong windowSong = new WindowSong(song);
 
                 if (windowSong.ShowDialog() == true)
                 {
                     song = windowSong.song;
-                    song.EditMetaData();
                     playlist.AddSong(song);
+                    songsMetaDataGoingToBeChanged.Add(song);
+
                     UpdateListView();
                 }
             }
@@ -159,8 +163,8 @@ namespace MusikProgramm
                 if (windowSong.ShowDialog() == true)
                 {
                     song = windowSong.song;
-                    song.EditMetaData();
                     UpdateListView();
+                    songsMetaDataGoingToBeChanged.Add(song);
                 }
             }
             else
@@ -229,8 +233,6 @@ namespace MusikProgramm
 
         private void Sort()
         {
-            Song songPrevPlayed = playlist.SongListSorted[playlist.currentSong];
-
             var selectedItem = (ComboBoxItem)ComboBoxSortType.SelectedItem;
             string selectedItemString = selectedItem.Content.ToString();
 
@@ -256,7 +258,28 @@ namespace MusikProgramm
             UpdateListView();
 
             manualIndexChange = true;
-            ListViewSongs.SelectedItem = songPrevPlayed;
+        }
+
+        private void ButtonSaveMetadata_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Playlist previousPlaylist = player.currentPlaylist;
+                player.SetPlaylist(new Playlist("empty Playlist"), true);
+
+                foreach(Song songNeedsChange in new List<Song>(songsMetaDataGoingToBeChanged))
+                {
+                    songNeedsChange.EditMetaData();
+                    songsMetaDataGoingToBeChanged.Remove(songNeedsChange);
+                }
+
+                player.SetPlaylist(previousPlaylist, false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Problem Saving Metadata");
+                Log.Error($"Error saving Metadata: {ex}");
+            }
         }
     }
 }

@@ -54,13 +54,15 @@ namespace MusikProgramm
 
         public void EditMetaData()
         {
-            TagLib.File TaglibFile = TagLib.File.Create(Path);
-            TagLib.Tag FileTag = TaglibFile.Tag; // metadata
+            using (TagLib.File TagLibFile = TagLib.File.Create(Path))
+            {
+                TagLibFile.Tag.Title = Name;
+                TagLibFile.Tag.Performers = Artists;
+                TagLibFile.Tag.Album = Album;
+                TagLibFile.Tag.Year = ReleaseYear;
 
-            FileTag.Title = Name;
-            FileTag.Performers = Artists;
-            FileTag.Album = Album;
-            FileTag.Year = ReleaseYear;
+                TagLibFile.Save();
+            }
         }
 
         public override string ToString()

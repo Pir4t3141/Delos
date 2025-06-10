@@ -92,6 +92,7 @@ namespace MusikProgramm
                 manualStop = true;
 
                 Status = PlayerStatus.STOPPED;
+                audiofile.Dispose();
                 outputDevice.Dispose();
                 audiofile = null;
                 outputDevice = null;
@@ -199,12 +200,20 @@ namespace MusikProgramm
             AudioFileProgressChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void SetPlaylist(Playlist playlist)
+        public void SetPlaylist(Playlist playlist, bool saving)
         {
-            SaveProgress();
+            if (saving)
+            {
+                SaveProgress();
+            }
             Stop();
 
             currentPlaylist = playlist;
+
+            if (playlist == null || playlist.SongListSorted.Count == 0)
+            {
+                return;
+            }
 
             Song nextSong = playlist.NextSong(true);
             SetupNextSong(nextSong.Path);

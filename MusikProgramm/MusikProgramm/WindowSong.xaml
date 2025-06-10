@@ -36,8 +36,10 @@
         <!-- Not needed anymore <TextBox x:Name="TextBoxPath" Grid.Column="1" Grid.Row="4" Background="WhiteSmoke" Width="200px" Height="30px"/>-->
         
         <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="ButtonCancel" Content="Cancel" Height="30px" Width="100px" Margin="0 0 20 0" Click="ButtonCancel_Click"/>
-            <Button x:Name="ButtonAdd" Content="Add" Height="30px" Width="100px" Margin="0 0 10 0" Click="ButtonAdd_Click"/>
+            <Button x:Name="ButtonCancel" Content="Cancel" Height="30px" Width="100px" Margin="0 0 20 0"
+            Click="ButtonCancel_Click" IsCancel="True"/>
+            <Button x:Name="ButtonAdd" Content="Add" Height="30px" Width="100px" Margin="0 0 10 0"
+            Click="ButtonAdd_Click" IsDefault="True"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -131,7 +131,11 @@ namespace MusikProgramm
 
         public void Sort(SortTypes sortType, bool sortedUp)
         {
-            Song songPrevPlayed = SongListSorted[currentSong];
+            Song ?songPrevPlayed = null;
+            if (SongListSorted.Count > 0)
+            {
+                songPrevPlayed = SongListSorted[currentSong];
+            }
 
             switch (sortType)
             {
@@ -156,6 +160,11 @@ namespace MusikProgramm
             if (!sortedUp)
             {
                 SongListSorted.Reverse();
+            }
+
+            if (songPrevPlayed == null)
+            {
+                return;
             }
 
             foreach (Song song in SongListSorted)
