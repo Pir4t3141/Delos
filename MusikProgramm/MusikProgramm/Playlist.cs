@@ -224,7 +224,10 @@ namespace MusikProgramm
 
         public void SaveProgress(int progress)
         {
-            SongListSorted[currentSong].Progress = progress;
+            if (SongListSorted.Count > 0)
+            {
+                SongListSorted[currentSong].Progress = progress;
+            }
         }
 
         public void Shuffle()
