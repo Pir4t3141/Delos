@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using Serilog;
+using YoutubeDLSharp;
 
 namespace MusikProgramm
 {
@@ -39,10 +40,13 @@ namespace MusikProgramm
         private bool sortedUp = true;
         public SortTypes sortType { get; set; } = SortTypes.DEFAULT;
         public List<Song> songsMetaDataGoingToBeChanged = new List<Song>();
+        private YoutubeDL ytdl = new YoutubeDL();
 
         public WindowPlaylist(Playlist playlist, Player player)
         {
             InitializeComponent();
+
+            ytdl.OutputFolder = "downloadedSongs";
 
             this.Title = $"{playlist.Name}";
 
@@ -262,10 +266,12 @@ namespace MusikProgramm
 
         private void ButtonSaveMetadata_Click(object sender, RoutedEventArgs e)
         {
+            // FIX: dkkdk
             try
             {
-                Playlist previousPlaylist = player.currentPlaylist;
-                player.SetPlaylist(new Playlist("empty Playlist"), true);
+                //Playlist previousPlaylist = player.currentPlaylist;
+                //player.SetPlaylist(new Playlist("empty Playlist"), true);
+                player.Stop();
 
                 foreach(Song songNeedsChange in new List<Song>(songsMetaDataGoingToBeChanged))
                 {
@@ -273,13 +279,18 @@ namespace MusikProgramm
                     songsMetaDataGoingToBeChanged.Remove(songNeedsChange);
                 }
 
-                player.SetPlaylist(previousPlaylist, false);
+                //player.SetPlaylist(previousPlaylist, false);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Problem Saving Metadata");
                 Log.Error($"Error saving Metadata: {ex}");
             }
+        }
+
+        private void ButtonAddFromYT_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: This here
         }
     }
 }

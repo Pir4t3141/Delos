@@ -92,8 +92,10 @@ namespace MusikProgramm
                 manualStop = true;
 
                 Status = PlayerStatus.STOPPED;
-                audiofile.Dispose();
+  
+                outputDevice.Stop();
                 outputDevice.Dispose();
+                audiofile.Dispose();
                 audiofile = null;
                 outputDevice = null;
 
