@@ -1,0 +1,27 @@
+﻿<Window x:Class="MusikProgramm.WindowLink"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MusikProgramm"
+        mc:Ignorable="d"
+        Title="Enter Link" Height="100" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Link:" Height="30px"/>
+        <TextBox x:Name="TextBoxLink" Grid.Column="1" Background="WhiteSmoke" Width="200px" Height="30px"/>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="ButtonCancel" IsCancel="True" Content="Cancel" Height="30px" Width="100px" Margin="0 0 20 0" Click="ButtonCancel_Click"/>
+            <Button x:Name="ButtonConfirm" IsDefault="True" Content="Confirm" Height="30px" Width="100px" Margin="0 0 10 0" Click="ButtonConfirm_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -11,10 +11,13 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using Serilog;
 using YoutubeDLSharp;
+using YoutubeDLSharp.Options;
+using static System.Windows.Forms.DataFormats;
+using static System.Windows.Forms.Design.AxImporter;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace MusikProgramm
 {
@@ -34,6 +37,10 @@ namespace MusikProgramm
 
     public partial class WindowPlaylist : Window
     {
+        string ytDlpPath = "yt-dlp.exe";
+        string ffmpegPath = "ffmpeg.exe";
+        string pathToytdlpAndffmpeg = "YTDLPSharpRequirements";
+
         public Playlist playlist { get; private set; } = new Playlist("Empty");
         private Player player = new Player();
         private bool manualIndexChange = false;
@@ -41,12 +48,23 @@ namespace MusikProgramm
         public SortTypes sortType { get; set; } = SortTypes.DEFAULT;
         public List<Song> songsMetaDataGoingToBeChanged = new List<Song>();
         private YoutubeDL ytdl = new YoutubeDL();
+        private string defaultPathToYTDownload = "downloadedSongs";
 
         public WindowPlaylist(Playlist playlist, Player player)
         {
             InitializeComponent();
 
-            ytdl.OutputFolder = "downloadedSongs";
+            if (!Directory.Exists(pathToytdlpAndffmpeg)) 
+            {
+                Directory.CreateDirectory(pathToytdlpAndffmpeg);
+            }
+
+            if (!Directory.Exists(defaultPathToYTDownload))
+            {
+                Directory.CreateDirectory(defaultPathToYTDownload);
+            }
+
+            ytdl.OutputFolder = defaultPathToYTDownload;
 
             this.Title = $"{playlist.Name}";
 
@@ -116,7 +134,6 @@ namespace MusikProgramm
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
         {
             string ?filePath = null;
-            Song song;
             // get path
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "mp3 files (*.mp3)|*.mp3";
@@ -132,19 +149,7 @@ namespace MusikProgramm
 
             if (filePath != null)
             {
-                song = new Song(filePath);
-                song.LoadFromMetaData();
-
-                WindowSong windowSong = new WindowSong(song);
-
-                if (windowSong.ShowDialog() == true)
-                {
-                    song = windowSong.song;
-                    playlist.AddSong(song);
-                    songsMetaDataGoingToBeChanged.Add(song);
-
-                    UpdateListView();
-                }
+                AddSong(filePath);
             }
         }
         private void UpdateListView()
@@ -288,9 +293,95 @@ namespace MusikProgramm
             }
         }
 
-        private void ButtonAddFromYT_Click(object sender, RoutedEventArgs e)
+        private async void ButtonAddFromYT_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: This here
+            string link = null;
+            string path = null;
+            WindowLink windowLink = new WindowLink();
+            if (windowLink.ShowDialog() == true)
+            {
+                link = windowLink.Link;
+            }
+            else
+            {
+                return;
+            }
+
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "MP3-Datei (*.mp3)|*.mp3";
+            dialog.Title = "Save as MP3";
+            dialog.DefaultExt = "mp3";
+            dialog.AddExtension = true;
+            dialog.DefaultDirectory = defaultPathToYTDownload;
+
+            if (dialog.ShowDialog() == true)
+            {
+                path = dialog.FileName;
+
+                Log.Debug($"Saved MP3 to {path}");
+            }
+            else
+            {
+                return;
+            }
+
+            try
+            {
+                if (!File.Exists(Path.Combine(pathToytdlpAndffmpeg, ytDlpPath)))
+                {
+                    await Utils.DownloadYtDlp(pathToytdlpAndffmpeg);
+                }
+
+                if (!File.Exists(Path.Combine(pathToytdlpAndffmpeg, ffmpegPath)))
+                {
+                    await Utils.DownloadFFmpeg(pathToytdlpAndffmpeg);
+                }
+
+                ytdl.YoutubeDLPath = Path.Combine(pathToytdlpAndffmpeg, ytDlpPath);
+                ytdl.FFmpegPath = Path.Combine(pathToytdlpAndffmpeg, ffmpegPath);
+
+                ytdl.OutputFolder = Path.GetDirectoryName(path);
+
+                var res = await ytdl.RunAudioDownload(link, AudioConversionFormat.Mp3);
+
+                if (res.Success && File.Exists(res.Data))
+                {
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+
+                    File.Move(res.Data, path);
+                    AddSong(path);
+                }
+                else
+                {
+                    MessageBox.Show("Error: noFileFound");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error downloading song");
+                Log.Error($"Download Error: {ex}");
+            }
+
+        }
+
+        public void AddSong(string filePath)
+        {
+            Song song = new Song(filePath);
+            song.LoadFromMetaData();
+
+            WindowSong windowSong = new WindowSong(song);
+
+            if (windowSong.ShowDialog() == true)
+            {
+                song = windowSong.song;
+                playlist.AddSong(song);
+                songsMetaDataGoingToBeChanged.Add(song);
+
+                UpdateListView();
+            }
         }
     }
 }

@@ -13,6 +13,9 @@
     <Compile Update="WindowAddEditPlaylist.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="WindowLink.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="WindowPlaylist.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

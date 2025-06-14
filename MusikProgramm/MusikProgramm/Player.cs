@@ -34,13 +34,11 @@ namespace MusikProgramm
 
     public class Player
     {
-        public PlayerStatus Status { get; set; } = PlayerStatus.STOPPED;
-        public PlayerPlaylistStatus StatusPlaylist { get; set; } = PlayerPlaylistStatus.NONE;
-
         public AudioFileReader? audiofile;
         public WasapiOut? outputDevice;
 
-        public Playlist currentPlaylist { private set; get; }
+        public PlayerStatus Status { get; set; } = PlayerStatus.STOPPED;
+        public PlayerPlaylistStatus StatusPlaylist { get; set; } = PlayerPlaylistStatus.NONE;
 
         public event EventHandler<PlayerStatus> PlayerStatusChanged;
 
@@ -49,6 +47,8 @@ namespace MusikProgramm
         public event EventHandler AudioFileReaderVolumeChanged;
 
         public event EventHandler AudioFileProgressChanged;
+
+        public Playlist currentPlaylist { private set; get; }
 
         private bool shuffle = false;
 
