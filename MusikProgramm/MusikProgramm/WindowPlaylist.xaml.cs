@@ -197,11 +197,8 @@ namespace MusikProgramm
 
                 if (messageBoxresult == MessageBoxResult.Yes)
                 {
-                    if (player.currentPlaylist.SongListSorted[player.currentPlaylist.currentSong] == songToDelete)
-                    {
-                        player.Skip();
-                    }
                     playlist.RemoveSong(songToDelete);
+                    player.SetPlaylist(playlist, false);
                 }
             }
             UpdateListView();
@@ -380,6 +377,7 @@ namespace MusikProgramm
                 playlist.AddSong(song);
                 songsMetaDataGoingToBeChanged.Add(song);
 
+                player.SetPlaylist(playlist, true);
                 UpdateListView();
             }
         }

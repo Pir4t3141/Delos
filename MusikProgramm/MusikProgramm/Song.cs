@@ -15,8 +15,6 @@ namespace MusikProgramm
 {
     public class Song
     {
-        //TODO: Add genre maybe
-        //TODO: decide which props are public and which are private
         public string Name { get; set; }
 
         public int Length
@@ -32,7 +30,7 @@ namespace MusikProgramm
         public string[] Artists { get; set; } // Name of artists
         public string Path { get; set; } // Path of file
 
-        public int ?Progress { get; set; } // How long you listened the last time TODO: save into here LOGIC: If next song Progress = null; if not null continue here; if playlist stops playing save TODO: Implement Logic where needed
+        public int ?Progress { get; set; } // How long you listened the last time LOGIC: If next song Progress = null; if not null continue here; if playlist stops playing save TODO: Implement Logic where needed
         // Progress in seconds
         public string Album { get; set; }
 

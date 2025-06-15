@@ -212,12 +212,18 @@ namespace MusikProgramm
 
             currentPlaylist = playlist;
 
-            if (playlist == null || playlist.SongListSorted.Count == 0)
+            if (playlist == null || playlist.SongListSorted == null || playlist.SongListSorted.Count == 0)
             {
                 return;
             }
 
             Song nextSong = playlist.NextSong(true);
+
+            if (nextSong == null)
+            {
+                return;
+            }
+
             SetupNextSong(nextSong.Path);
 
             if (nextSong.Progress != null)

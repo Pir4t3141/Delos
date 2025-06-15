@@ -52,11 +52,9 @@ namespace MusikProgramm
                     timer.Start();
                     player.audiofile.Volume = ((float)SliderVolume.Value) / 100;
                     ImagePlayPause.Source = new BitmapImage(new Uri("images/pause.png", UriKind.Relative));
-                    // TODO: change icon
                     break;
                 case PlayerStatus.PAUSED:
                     ImagePlayPause.Source = new BitmapImage(new Uri("images/play.png", UriKind.Relative));
-                    // TODO: change icon
                     break;
                 default:
                     break;

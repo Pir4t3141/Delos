@@ -92,7 +92,7 @@ namespace MusikProgramm
             if (!Directory.Exists(DirectoryName)){
                 Directory.CreateDirectory(DirectoryName);
             }
-            using (StreamWriter sw = new StreamWriter($"{DirectoryName}//{Name.Replace(" ", "]")}.txt")) // TODO: find better file format
+            using (StreamWriter sw = new StreamWriter($"{DirectoryName}//{Name.Replace(" ", "]")}.delos"))
             {
                 Log.Debug("Saving Playlist");
                 foreach (Song song in SongList)
@@ -196,7 +196,7 @@ namespace MusikProgramm
             }
             else
             {
-                if (currentSong == SongListSorted.Count - 1)
+                if (currentSong == SongListSorted.Count - 1 || currentSong > SongListSorted.Count - 1)
                 {
                     currentSong = 0;
                 }
@@ -224,7 +224,7 @@ namespace MusikProgramm
 
         public void SaveProgress(int progress)
         {
-            if (SongListSorted.Count > 0)
+            if (SongListSorted.Count > 0 && currentSong <= SongListSorted.Count - 1)
             {
                 SongListSorted[currentSong].Progress = progress;
             }

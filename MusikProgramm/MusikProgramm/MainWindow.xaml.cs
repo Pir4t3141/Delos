@@ -8,10 +8,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using NAudio;
 using NAudio.Wave;
 using Serilog;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace MusikProgramm
@@ -62,7 +62,7 @@ namespace MusikProgramm
                     {
                         string[] fileSeperated = file.Split('.');
                         Array.Reverse(fileSeperated);
-                        if (fileSeperated[0] == "txt") // only looks for playlists //TODO: Change .txt to playlist format
+                        if (fileSeperated[0] == "delos") // only looks for playlists //TODO: Change .txt to playlist format
                         {
                             Playlist playlist = Playlist.Import(file);
                             playlists.Add(playlist);
@@ -104,6 +104,7 @@ namespace MusikProgramm
             {
                 Playlist favoriteSongs = new Playlist("Favorite Songs");
                 favoriteSongs.Save();
+                playlists.Add(favoriteSongs);
             }
 
             UpdateListView();
@@ -119,6 +120,7 @@ namespace MusikProgramm
 
             if (playlistWindow != null)
             {
+                playlistWindow.playlist.Save();
                 playlistWindow.Close();
             }
         }
@@ -224,8 +226,9 @@ namespace MusikProgramm
 
                 if (messageBoxresult == MessageBoxResult.Yes)
                 {
-                    string filePath = $"Playlists//{playlistToDelete.Name.Replace(" ", "]")}.txt"; // TODO: replace with file type
+                    string filePath = Path.Combine("Playlists", $"{playlistToDelete.Name.Replace(" ", "]")}.delos");
                     playlists.Remove(playlistToDelete);
+                    player.Stop();
 
                     if (File.Exists(filePath))
                     {
