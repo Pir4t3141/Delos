@@ -65,8 +65,11 @@ namespace MusikProgramm
                         if (fileSeperated[0] == "delos") // only looks for playlists //TODO: Change .txt to playlist format
                         {
                             Playlist playlist = Playlist.Import(file);
-                            playlists.Add(playlist);
-                            ListViewPlaylists.Items.Add(playlist);
+                            if (playlist != null)
+                            {
+                                playlists.Add(playlist);
+                                ListViewPlaylists.Items.Add(playlist);
+                            }
                         }
                         else
                         {
