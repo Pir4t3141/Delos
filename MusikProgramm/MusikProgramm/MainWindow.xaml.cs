@@ -62,7 +62,7 @@ namespace MusikProgramm
                     {
                         string[] fileSeperated = file.Split('.');
                         Array.Reverse(fileSeperated);
-                        if (fileSeperated[0] == "delos") // only looks for playlists //TODO: Change .txt to playlist format
+                        if (fileSeperated[0] == "delos") // only looks for playlists
                         {
                             Playlist playlist = Playlist.Import(file);
                             if (playlist != null)

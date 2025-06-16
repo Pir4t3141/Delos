@@ -30,11 +30,11 @@
         <Label x:Name="LabelName" Grid.ColumnSpan="2" Content="Playlist - Name" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Bauhaus 93"/>
 
         <WrapPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Top">
-            <Button x:Name="ButtonAdd" Content="Add Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonAdd_Click"/>
-            <Button x:Name="ButtonEdit" Content="Edit Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonEdit_Click"/>
-            <Button x:Name="ButtonDelete" Content="Delete Song" Width="100" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonDelete_Click"/>
-            <Button x:Name="ButtonSaveMetadata" Content="Save changes to Metadata"  Width="150" Height="30" Margin="5" HorizontalAlignment="Left" Click="ButtonSaveMetadata_Click"/>
-            <Button x:Name="ButtonAddFromYT" Content="Add Song From Youtubelink" Width="170" Height="30" Margin="5" Click="ButtonAddFromYT_Click"/>
+            <Button x:Name="ButtonAdd" Content="Add Song" Width="100" Height="30" Margin="4" HorizontalAlignment="Left" Click="ButtonAdd_Click"/>
+            <Button x:Name="ButtonEdit" Content="Edit Song" Width="100" Height="30" Margin="4" HorizontalAlignment="Left" Click="ButtonEdit_Click"/>
+            <Button x:Name="ButtonDelete" Content="Delete Song" Width="100" Height="30" Margin="4" HorizontalAlignment="Left" Click="ButtonDelete_Click"/>
+            <Button x:Name="ButtonSaveMetadata" Content="Save changes to Metadata"  Width="150" Height="30" Margin="4" HorizontalAlignment="Left" Click="ButtonSaveMetadata_Click"/>
+            <Button x:Name="ButtonAddFromYT" Content="Add Song From Youtubelink" Width="170" Height="30" Margin="4" Click="ButtonAddFromYT_Click"/>
         </WrapPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >

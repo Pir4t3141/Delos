@@ -339,6 +339,7 @@ namespace MusikProgramm
 
                 ytdl.OutputFolder = Path.GetDirectoryName(path);
 
+                // Solved with help of AI from here
                 var res = await ytdl.RunAudioDownload(link, AudioConversionFormat.Mp3);
 
                 if (res.Success && File.Exists(res.Data))
@@ -349,6 +350,7 @@ namespace MusikProgramm
                     }
 
                     File.Move(res.Data, path);
+                    // Solved with help of AI to here
                     AddSong(path);
                 }
                 else
