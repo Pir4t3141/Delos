@@ -46,7 +46,7 @@ namespace MusikProgramm
 
             //Serilog setup
             Log.Logger = new LoggerConfiguration().
-                MinimumLevel.Debug().
+                MinimumLevel.Error().
                 WriteTo.File("musikprogramm.log", rollingInterval: RollingInterval.Month).
                 CreateLogger();
 
@@ -151,7 +151,7 @@ namespace MusikProgramm
 
             //currentPlaylist = playlists[ListViewPlaylists.SelectedIndex];
 
-            if (currentPlaylist != null && playlistWindow == null)
+            if (currentPlaylist != null && playlistWindow == null && ListViewPlaylists.SelectedIndex >= 0 && ListViewPlaylists.SelectedIndex < playlists.Count)
             {
                 lastEditedPlaylist = playlists[ListViewPlaylists.SelectedIndex];
 
