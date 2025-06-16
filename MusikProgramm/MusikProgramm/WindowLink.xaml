@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusikProgramm"
         mc:Ignorable="d"
-        Title="Enter Link" Height="100" Width="300">
+        Title="Enter Link" Height="100" Width="300"
+        Icon="delos_logo.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

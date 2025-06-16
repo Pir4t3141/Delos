@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusikProgramm"
         mc:Ignorable="d"
-        Title="PlaylistName" Height="450" Width="800">
+        Title="PlaylistName" Height="450" Width="800"
+        Icon="delos_logo.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.25*"/>
