@@ -50,13 +50,13 @@ Screenshots aus dem Programm:
 | 21.05 | Verbessern des Designs | Chiara | 100% |
 | 28.05 | User Control für Play Pause usw. | Chiara | 100% |
 | 27.05 + 28.05 | Klassen so gut wie fertig coden | Tobias | 100% |
-| 04.06 | (erfolglose) Fehlerbehebung | Chiara, Tobi, Herr Bechtold | 100% |
-| 06.06 | (erfolgreiche) Fehlerbehebung | Chiara, Tobi, Herr Diem | 100% |
-| 10.06 | Fehler suchen und behandeln| Chiara, Tobi | 100% |
-| 06.06 | (erfolgreiche) Fehlerbehebung | Chiara, Tobi, Herr Diem | 100% |
+| 04.06 | (erfolglose) Fehlerbehebung | Chiara, Tobias, Herr Bechtold | 100% |
+| 06.06 | (erfolgreiche) Fehlerbehebung | Chiara, Tobias, Herr Diem | 100% |
+| 06.06 | Hinzufügen von eigener Player Klasse | Tobias | 100% |
+| 08.06 | Hinzufügen, Bearbeiten, Löschen von Songs | Tobias | 100% |
+| 10.06 | Fehler suchen und behandeln| Chiara, Tobias | 100% |
+| 11.06 - 14.06 | Songs von Youtube Downloaden| Tobias | 100% |
 | 15.06 | Keyboardshortcuts | Chiara | 100% |
-
-
 
 ## Klassen
 ### Song Klasse
