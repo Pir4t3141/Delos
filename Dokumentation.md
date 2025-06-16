@@ -12,7 +12,7 @@ Jahr: 2025
 Betreuer: Diem Lukas, Bechtold David      
 
 Kurzbeschreibung:
-Dies ist ein Programm zum Abspielen von Musik, das verschiedene Funktionen rund um Playlists und Audiodateien bietet. Nutzerinnen und Nutzer können eigene Playlists erstellen, verwalten und speichern, um ihre Lieblingssongs zu sortieren und jederzeit wieder abzuspielen. Zusätzlich besteht die Möglichkeit, eigene Songs oder Audiodateien in das Programm hochzuladen. Diese werden dann gespeichert und können später in Playlists eingefügt werden
+delos ist ein Programm zum Abspielen von Musik, das verschiedene Funktionen rund um Playlists und Audiodateien bietet. Nutzerinnen und Nutzer können eigene Playlists erstellen, verwalten und speichern, um ihre Lieblingssongs zu sortieren und jederzeit wieder abzuspielen. Zusätzlich besteht die Möglichkeit, eigene Songs oder Audiodateien in das Programm hochzuladen. Diese werden dann gespeichert und können später in Playlists eingefügt werden
 
 Screenshots aus dem Programm: 
 
@@ -54,7 +54,7 @@ Screenshots aus dem Programm:
 | 06.06 | (erfolgreiche) Fehlerbehebung | Chiara, Tobi, Herr Diem | 100% |
 | 10.06 | Fehler suchen und behandeln| Chiara, Tobi | 100% |
 | 06.06 | (erfolgreiche) Fehlerbehebung | Chiara, Tobi, Herr Diem | 100% |
-| 15.06 | erste Keyboardshortcuts | Chiara | 100% |
+| 15.06 | Keyboardshortcuts | Chiara | 100% |
 
 
 
@@ -95,10 +95,12 @@ Screenshots aus dem Programm:
 - +skip():void 
 - +sort():void 
 - +nextSong():void 
-- +serialize() 
+- +serialize()
 
-
-
+## Wie arbeiten die Klassen miteinander?
+- Playlistklasse -> um Playlisten zu erstellen und bearbeiten
+- Songklasse -> um Songs zu "erstellen" und bearbeiten
+- Playerklasse -> um die Musik abzuspielen
 
 ## Bedienungsanleitung / genauere Anleitung
 Wenn man die App öffnet, sieht man direkt alle Playlists, die man schon erstellt hat. Diese werden automatisch angezeigt, ohne dass man erst irgendwo draufklicken muss. Man kann dann durch die Liste scrollen und sich anschauen, welche Playlists es gibt und kann über Buttons die Playlist bearbeiten oder Details verändern. Wenn man eine Playlist genauer anschauen will, macht man einfach einen Doppelklick darauf. Dann öffnet sich die Playlist und man sieht alle Songs, die darin gespeichert sind. In diesem Bereich gibt es auch verschiedene Buttons, mit denen man etwas an der Playlist oder den Songs verändern kann. Zum Beispiel kann man neue Songs hinzufügen oder den Namen einer bestehenden Playlist ändern.
@@ -107,6 +109,6 @@ Wenn man die App öffnet, sieht man direkt alle Playlists, die man schon erstell
 ## Erweiterungsmöglichkeiten / Zukunfsaussichten
 Ideen zur Erweiterung: 
 - Optionen um die Playlist zu teilen oder geteilte Playlisten importieren
-- einen Webserver benutzen, um die Songs zu empfangen / abzuspielen
+- einen Webserver benutzen, um die Songs über das Internet zu empfangen / abzuspielen
 - die Metadaten über einen Click eines Buttons direkt zu ändern um in Zukunft die Songs so abzuspielen, wie sie geändert wurden
 
